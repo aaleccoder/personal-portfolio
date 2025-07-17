@@ -1,0 +1,65 @@
+{
+  "HomePage": {
+    "helloWorld": "Hola Mundo",
+    "welcomeMessage": "¡Bienvenido a mi portafolio!",
+    "description": "Esta es una página de portafolio de ejemplo usando Next.js y next-intl para internacionalización."
+  },
+  "Header": {
+    "title": "Mi Portafolio",
+    "home": "Inicio",
+    "about": "Acerca de",
+    "skills": "Habilidades",
+    "projects": "Proyectos",
+    "experience": "Experiencia",
+    "education": "Educación"
+  },
+  "Hero": {
+    "greeting": "Hey, There!",
+    "whoami": "Soy Alejandro",
+    "description": "Desarrollador Web, Diseñador y Creador",
+    "projects": "Proyectos",
+    "skills": "Habilidades",
+    "commits": "Commits",
+    "stars": "Estrellas GitHub"
+  },
+  "LanguageSwitcher": {
+    "language": "Idioma"
+  },
+  "Skills": {
+    "title": "Habilidades"
+  },
+  "Footer": {
+    "copy": "Portafolio de Daeralysdev. Hecho con ❤️ en Holguín, Cuba."
+  },
+  "Proyects": {
+    "title": "Proyectos"
+  },
+  "AboutMe": {
+    "title": "Sobre mí",
+    "imageAlt": "Sobre mí",
+    "paragraph1": "Soy un desarrollador de software apasionado, enfocado en crear aplicaciones web eficientes y escalables. Mi camino en la tecnología ha sido impulsado por el amor a la resolución de problemas y el aprendizaje continuo.",
+    "paragraph2": "Con experiencia en varios lenguajes y frameworks, disfruto construir interfaces amigables y sistemas robustos. Me desenvuelvo bien en entornos colaborativos y siempre estoy listo para nuevos retos."
+  },
+  "Education": {
+    "title": "Educación",
+    "degree1": "Licenciatura en Ciencias de la Computación",
+    "institution1": "Universidad A",
+    "date1": "2014 - 2018",
+    "description1": "Estudié fundamentos de computación y desarrollo de software.",
+    "degree2": "Maestría en Ingeniería de Software",
+    "institution2": "Universidad B",
+    "date2": "2018 - 2020",
+    "description2": "Especialización en prácticas y metodologías de ingeniería de software."
+  },
+  "Experience": {
+    "title": "Experiencia Laboral",
+    "title1": "Ingeniero de Software",
+    "company1": "Empresa Tecnológica",
+    "date1": "2020 - Presente",
+    "description1": "Desarrollo de aplicaciones web usando tecnologías modernas.",
+    "title2": "Desarrollador Frontend",
+    "company2": "Otra Empresa Tecnológica",
+    "date2": "2018 - 2020",
+    "description2": "Construcción de interfaces de usuario con React y TypeScript."
+  }
+}
