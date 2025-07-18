@@ -90,7 +90,7 @@
   --sidebar-accent-foreground: oklch(0.2935 0.0632 243.1571);
   --sidebar-border: oklch(0.2781 0.0296 256.848);
   --sidebar-ring: oklch(0.709 0.1592 293.5412);
-  --font-sans: Inter, sans-serif;
+  --font-sans: Poppins, sans-serif;
   --font-serif: serif;
   --font-mono: monospace;
   --radius: 0.5rem;

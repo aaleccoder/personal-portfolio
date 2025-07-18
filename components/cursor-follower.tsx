@@ -129,14 +129,14 @@ const CursorFollower = () => {
 
   // Style for the lantern-like radial gradient follower
   // Creates a large, very transparent radial gradient that follows the cursor
-  const baseSize = 500;
-  const hoverSize = 600;
-  const scrollBoost = scrollIntensity * 100; // Additional size from scrolling
+  const baseSize = 800;
+  const hoverSize = 800;
+  const scrollBoost = scrollIntensity * 80; // Additional size from scrolling
   const currentSize = (isHovering ? hoverSize : baseSize) + scrollBoost;
 
   // Dynamic opacity based on scroll intensity
-  const baseOpacity = 0.15;
-  const scrollOpacity = scrollIntensity * 0.1;
+  const baseOpacity = 0.1;
+  const scrollOpacity = baseOpacity;
 
   const followerStyle: React.CSSProperties = {
     transform: `translate(${position.x - currentSize / 2}px, ${position.y - currentSize / 2}px)`,
@@ -144,19 +144,15 @@ const CursorFollower = () => {
     width: `${currentSize}px`,
     height: `${currentSize}px`,
     // Very transparent radial gradient using CSS variables with scroll enhancement
-    background: `radial-gradient(circle, 
-      hsl(from var(--primary) h s l / ${baseOpacity + scrollOpacity}) 0%,
-      hsl(from var(--primary) h s l / ${(baseOpacity + scrollOpacity) * 0.7}) 20%,
-      hsl(from var(--primary) h s l / ${(baseOpacity + scrollOpacity) * 0.4}) 40%,
-      hsl(from var(--primary) h s l / ${(baseOpacity + scrollOpacity) * 0.2}) 60%,
+    background: `radial-gradient(circle,
+      hsl(from var(--primary) h s l / ${baseOpacity + scrollOpacity}) 60%,
       transparent 80%
     )`,
     // Smooth transitions for size changes and opacity
-    opacity: isVisible ? 1 : 0,
+    opacity: isVisible ? 0.5 : 0,
     transition: 'opacity 0.5s ease',
     // Additional lantern-like effects with scroll responsiveness
-    filter: isHovering || scrollIntensity > 0.3 ? 'blur(0px)' : 'blur(1px)',
-    mixBlendMode: 'multiply',
+    filter: 'blur(60px)',
   };
 
   return (

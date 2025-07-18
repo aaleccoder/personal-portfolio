@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { Header } from "@/components/header";
@@ -8,9 +8,9 @@ import CursorFollower from "@/components/cursor-follower";
 import { Footer } from "@/components/footer";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const poppinsSans = Poppins({
+  variable: "--font-poppins",
+  weight: ['300', "500", "700", '900']
 });
 
 const geistMono = Geist_Mono({
@@ -29,20 +29,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppinsSans.variable} ${geistMono.variable} antialiased bg-radial from-primary/20 to-primary/10 overflow-hidden scroll-smooth`}
       >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
           disableTransitionOnChange>
           <NextIntlClientProvider>
             <CursorFollower />
             <Header />
             {children}
-            <Footer />
+            {/* <Footer /> */}
             <ScrollToTopButton />
           </NextIntlClientProvider>
         </ThemeProvider>

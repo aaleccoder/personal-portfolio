@@ -47,7 +47,6 @@ const TypewriterText = ({ text, delay = 0, duration = 0.05, className }: { text:
         }}
         style={{ marginLeft: 2 }} // Small margin for the cursor
       >
-        |
       </motion.span>
     </motion.span>
   );

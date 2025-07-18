@@ -8,19 +8,31 @@ export const Header = () => {
     {
       href: "#",
       label: "Home",
+    },
+    {
+      href: "#pastexperiences",
+      label: "Past experiences"
+    },
+    {
+      href: "#projects",
+      label: "Projects"
+    },
+    {
+      href: "#contact",
+      label: "Contact"
     }
   ]
 
 
   return (
-    <header className="sticky top-0 z-50">
-      <nav className="backdrop-blur-md flex flex-row justify-between p-4 items-center shadow-md">
-        <span>
+    <header className="fixed top-0 right-0 z-50">
+      <nav className="flex flex-row justify-between p-4 items-center">
+        {/* <span>
           <p className="font-bold uppercase">Daeralysdev</p>
-        </span>
+        </span> */}
         <div className="space-x-4 flex flex-row items-center">
           <ModeToggle />
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="default" size="icon" className="cursor-pointer">
                 <svg
@@ -50,7 +62,7 @@ export const Header = () => {
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
       </nav>
     </header >

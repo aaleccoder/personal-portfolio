@@ -65,7 +65,7 @@ export const Proyects = () => {
 
   return (
     <section className="w-full px-1 py-2 md:px-4 md:py-8">
-      <Carousel className="w-full max-w-full">
+      <Carousel className="w-full max-w-full cursor-pointer">
         <CarouselContent className="ml-0">
           {Proyects.map((proyect, index) => (
             <CarouselItem key={index} className="pl-1 md:pl-4">
