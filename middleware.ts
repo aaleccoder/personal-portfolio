@@ -1,16 +1,19 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { routing } from '@/i18n/routing';
-import createMiddleware from 'next-intl/middleware';
+import { NextRequest, NextResponse } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "@/i18n/routing";
+import { updateSession } from "@/utils/supabase/middleware";
 
-const intlMiddleware = createMiddleware(routing);
+const intlMiddleware = createIntlMiddleware(routing);
 
 export async function middleware(req: NextRequest) {
-
   const { pathname } = req.nextUrl;
 
-  if (pathname.startsWith('/admin')) {
-    if (pathname === '/admin') {
+  if (pathname.startsWith("/admin")) {
+    if (pathname === "/admin") {
       return NextResponse.next();
+    }
+    if (req.url.includes("/admin")) {
+      return await updateSession(req);
     }
   }
 
@@ -18,11 +21,8 @@ export async function middleware(req: NextRequest) {
   if (intlResponse) {
     return intlResponse;
   }
-
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next|_vercel|.*\\..*).*)',
-  ]
-}
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+};

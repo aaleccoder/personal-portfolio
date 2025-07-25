@@ -1,7 +1,6 @@
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ModeToggle } from "./theme-toogle";
 import { Button } from "./ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "./ui/dropdown-menu";
-
 
 export const Header = () => {
   const menu = [
@@ -11,18 +10,17 @@ export const Header = () => {
     },
     {
       href: "#pastexperiences",
-      label: "Past experiences"
+      label: "Past experiences",
     },
     {
       href: "#projects",
-      label: "Projects"
+      label: "Projects",
     },
     {
       href: "#contact",
-      label: "Contact"
-    }
-  ]
-
+      label: "Contact",
+    },
+  ];
 
   return (
     <header className="fixed top-0 right-0 z-50">
@@ -31,7 +29,8 @@ export const Header = () => {
           <p className="font-bold uppercase">Daeralysdev</p>
         </span> */}
         <div className="space-x-4 flex flex-row items-center">
-          <ModeToggle />
+          {/* <ModeToggle /> */}
+          <LanguageSwitcher />
           {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="default" size="icon" className="cursor-pointer">
@@ -65,6 +64,6 @@ export const Header = () => {
           </DropdownMenu> */}
         </div>
       </nav>
-    </header >
+    </header>
   );
-}
+};

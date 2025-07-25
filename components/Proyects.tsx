@@ -15,9 +15,13 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel"
+} from "@/components/ui/carousel";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, ArrowUpRightFromCircleIcon } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRightFromCircleIcon,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { TechIcon } from "./ui/tech-icon";
 import { getTechStack } from "@/lib/tech-stack";
@@ -31,10 +35,10 @@ export const Proyects = () => {
       techStack: [
         "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
         "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-        "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg"
+        "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
       ],
       link: "https://example.com/proyect1",
-      image: "https://placehold.co/600x400/png"
+      image: "https://placehold.co/600x400/png",
     },
     {
       number: "02",
@@ -43,10 +47,10 @@ export const Proyects = () => {
       techStack: [
         "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
         "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
-        "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"
+        "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
       ],
       link: "https://example.com/proyect2",
-      image: "https://placehold.co/600x400/png"
+      image: "https://placehold.co/600x400/png",
     },
     {
       number: "03",
@@ -55,13 +59,13 @@ export const Proyects = () => {
       techStack: [
         "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
         "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
-        "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg"
+        "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
       ],
       link: "https://example.com/proyect3",
-      image: "https://placehold.co/600x400/png"
+      image: "https://placehold.co/600x400/png",
     },
-  ]
-  const t = useTranslations('Proyects');
+  ];
+  const t = useTranslations("Proyects");
 
   return (
     <section className="w-full px-1 py-2 md:px-4 md:py-8">
@@ -73,7 +77,13 @@ export const Proyects = () => {
                 <div className="space-y-2 relative flex flex-col items-center justify-center md:col-span-2 order-2 md:space-y-8">
                   <div className="relative w-full flex items-center justify-center px-6 md:px-0">
                     <CarouselPrevious className="md:hidden absolute left-1 z-10 bg-background/80 hover:bg-background w-8 h-8" />
-                    <Image src={proyect.image} width={1024} height={512} alt="proyect image" className="rounded-xl w-full h-auto max-w-full" />
+                    <Image
+                      src={proyect.image}
+                      width={1024}
+                      height={512}
+                      alt="proyect image"
+                      className="rounded-xl w-full h-auto max-w-full"
+                    />
                     <CarouselNext className="md:hidden absolute right-1 z-10 bg-background/80 hover:bg-background w-8 h-8" />
                   </div>
                   <div className="hidden md:flex justify-end items-center gap-2 mt-4">
@@ -114,7 +124,11 @@ export const Proyects = () => {
                     <div className="flex flex-row align-middle items-center justify-start space-x-2 md:space-x-5 mt-1 md:mt-2">
                       <p className="text-lg md:text-2xl">Links</p>
                       <Button>
-                        <a href={proyect.link} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={proyect.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <ArrowUpRightFromCircleIcon />
                         </a>
                       </Button>
@@ -127,5 +141,5 @@ export const Proyects = () => {
         </CarouselContent>
       </Carousel>
     </section>
-  )
-}
+  );
+};

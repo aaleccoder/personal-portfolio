@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Geist_Mono, Poppins } from "next/font/google";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { Header } from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import CursorFollower from "@/components/cursor-follower";
-import { Footer } from "@/components/footer";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 
 const poppinsSans = Poppins({
   variable: "--font-poppins",
-  weight: ['300', "500", "700", '900']
+  weight: ["300", "500", "700", "900"],
 });
 
 const geistMono = Geist_Mono({
@@ -31,12 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${poppinsSans.variable} ${geistMono.variable} antialiased bg-radial from-primary/20 to-primary/10 overflow-hidden scroll-smooth`}
+        className={`${poppinsSans.variable} ${geistMono.variable} antialiased bg-radial from-primary/20 to-primary/10 scroll-smooth`}
       >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          disableTransitionOnChange>
+          disableTransitionOnChange
+        >
           <NextIntlClientProvider>
             <CursorFollower />
             <Header />

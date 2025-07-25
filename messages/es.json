@@ -10,8 +10,7 @@
     "about": "Acerca de",
     "skills": "Habilidades",
     "projects": "Proyectos",
-    "experience": "Experiencia",
-    "education": "Educación"
+    "experience": "Experiencia"
   },
   "Hero": {
     "greeting": "Hey, There!",
@@ -40,9 +39,7 @@
     "paragraph1": "Soy un desarrollador de software apasionado, enfocado en crear aplicaciones web eficientes y escalables. Mi camino en la tecnología ha sido impulsado por el amor a la resolución de problemas y el aprendizaje continuo.",
     "paragraph2": "Con experiencia en varios lenguajes y frameworks, disfruto construir interfaces amigables y sistemas robustos. Me desenvuelvo bien en entornos colaborativos y siempre estoy listo para nuevos retos."
   },
-  "Education": {
-    "title": "Educación",
-    "degree1": "Licenciatura en Ciencias de la Computación",
+
     "institution1": "Universidad A",
     "date1": "2014 - 2018",
     "description1": "Estudié fundamentos de computación y desarrollo de software.",

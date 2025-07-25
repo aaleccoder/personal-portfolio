@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: '**',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 'cdn.jsdelivr.net',
         port: '',
         pathname: '/gh/devicons/devicon/icons/**',
@@ -16,7 +22,12 @@ const nextConfig: NextConfig = {
         hostname: 'placehold.co',
         port: '',
         pathname: '/**',
-
+      },
+      {
+        protocol: 'https',
+        hostname: 'play.google.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   }

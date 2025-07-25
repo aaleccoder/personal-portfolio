@@ -10,8 +10,7 @@
     "about": "About",
     "skills": "Skills",
     "projects": "Projects",
-    "experience": "Experience",
-    "education": "Education"
+    "experience": "Experience"
   },
   "Hero": {
     "greeting": "Hey  there!, I'm Alejandro",
@@ -46,7 +45,6 @@
     "title": "My Journey",
     "description": "This is the story of my journey as a developer.",
     "Experiences": "Experiences",
-    "Education": "Education",
     "Projects": "Projects"
   }
 }
