@@ -5,10 +5,23 @@ import { SkillsComponent } from "@/components/Skills";
 import { Story } from "@/components/Story";
 import TypewriterText from "@/components/typewriter";
 import { easeOut, motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { useConfiguration } from "@/contexts/ConfigurationContext";
 
 export default function Home() {
   const t = useTranslations("Hero");
+  const locale = useLocale();
+  const { configuration, loading, error } = useConfiguration();
+
+  // Get the about me text from configuration based on current locale
+  const getAboutMeText = () => {
+    if (!configuration?.translations) return t("aboutMe"); // fallback to translation
+    return (
+      configuration.translations[locale]?.aboutMe ||
+      configuration.translations["en"]?.aboutMe ||
+      t("aboutMe")
+    );
+  };
   return (
     <div className="flex flex-col lg:flex-row font-sans transition-all duration-300 ease-in-out mt-14">
       {/* Left column - 5/12 width */}
@@ -26,7 +39,7 @@ export default function Home() {
           />
           <TypewriterText
             duration={0.02}
-            text={t("aboutMe")}
+            text={getAboutMeText()}
             className="font-sans text-sm text-muted-foreground leading-relaxed transition-all duration-300 ease-in-out"
           />
         </div>

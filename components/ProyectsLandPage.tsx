@@ -1,24 +1,38 @@
+import { Project } from "@/app/api/proyects/route";
 import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/dist/client/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const ProyectsLandPage = () => {
-  const Proyects = [
-    {
-      name: "Proyect 1",
-      description: "This is the description for Proyect 1",
-      image: "https://placehold.co/600x400",
-      link: "https://example.com/proyect1",
-      techStack: ["React", "TypeScript", "TailwindCSS"],
-    },
-    {
-      name: "Proyect 2",
-      description: "This is the description for Proyect 2",
-      image: "https://placehold.co/600x400",
-      link: "https://example.com/proyect2",
-      techStack: ["React", "TypeScript", "TailwindCSS"],
-    },
-  ];
+  const [proyects, setProyects] = useState<Project[]>([]);
+  const locale = usePathname().split("/")[1];
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProyects = async () => {
+      try {
+        const response = await fetch("/api/proyects");
+        const data = await response.json();
+        console.log(data);
+        if (
+          data &&
+          data.projectsResponseToClient &&
+          data.projectsResponseToClient.length > 0
+        ) {
+          setProyects(data.projectsResponseToClient);
+        } else {
+          setProyects([]);
+        }
+      } catch (error) {
+        setProyects([]);
+        console.error("Error fetching proyects:", error);
+      }
+    };
+
+    fetchProyects();
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -26,16 +40,24 @@ export const ProyectsLandPage = () => {
         Proyects
       </h2>
       <div className="flex flex-col gap-4">
-        {Proyects.map((proyect, index) => (
+        {proyects.map((proyect, index) => (
           <div
             key={index}
             className="flex flex-col md:flex-row cursor-pointer border rounded-lg p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 gap-4"
           >
             <div className="flex-shrink-0">
-              <a href={proyect.link} target="_blank" rel="noopener noreferrer">
+              <a
+                href={proyect.project_link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Image
-                  src={proyect.image}
-                  alt={proyect.name}
+                  src={proyect.images[0]}
+                  alt={
+                    proyect.translations.find(
+                      (translation) => translation.lang == locale,
+                    )?.name || "Project Image"
+                  }
                   className="w-32 h-32 object-cover rounded"
                   width={128}
                   height={128}
@@ -43,12 +65,22 @@ export const ProyectsLandPage = () => {
               </a>
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">{proyect.name}</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                {
+                  proyect.translations.find(
+                    (translation) => translation.lang == locale,
+                  )?.name
+                }
+              </h3>
               <p className="text-muted-foreground mb-2">
-                {proyect.description}
+                {
+                  proyect.translations.find(
+                    (translation) => translation.lang === locale,
+                  )?.description
+                }
               </p>
               <div className="flex flex-wrap gap-1">
-                {proyect.techStack?.map((tech, techIndex) => (
+                {proyect.skills?.map((tech, techIndex) => (
                   <span
                     key={techIndex}
                     className="px-2 py-1 bg-secondary/30  text-foreground rounded-xl text-xs"

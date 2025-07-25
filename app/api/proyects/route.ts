@@ -1,43 +1,71 @@
 import appwriteEnv from "@/utils/appwrite.env";
 import client from "@/utils/supabase/appwrite/server";
-import { data } from "motion/react-client";
 import { NextRequest } from "next/server";
-import { Databases, ID } from "node-appwrite";
+import { Databases, ID, Models, Query } from "node-appwrite";
 
-
-
+export type Project = {
+  $id: string;
+  project_link: string;
+  skills: string[];
+  images: string[];
+  translations: Models.Document[];
+};
 
 export async function GET() {
-  const database = new Databases(client);
-  const proyects = await database.listDocuments(appwriteEnv.appwrite.databaseId, appwriteEnv.appwrite.collections.proyects);
-  return new Response(JSON.stringify(proyects), {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-}
-
-export async function POST(request: NextRequest) {
-  const database = new Databases(client);
   try {
-    const body = await request.json();
+    const database = new Databases(client);
 
+    // Fetch all projects
+    const projectsResponse = await database
+      .listDocuments(
+        appwriteEnv.appwrite.databaseId,
+        appwriteEnv.appwrite.collections.proyects,
+      )
+      .then((response) => response.documents);
 
-    const response = await database.createDocument(appwriteEnv.appwrite.databaseId, appwriteEnv.appwrite.collections.proyects, ID.unique(), body);
+    const projectsResponseToClient: Project[] = [];
 
-    if (response) {
-      return new Response(JSON.stringify(response), {
-        status: 201,
+    await Promise.all(
+      projectsResponse.map(async (project) => {
+        const newProject: Project = {
+          $id: project.$id,
+          project_link: project.project_link,
+          skills: project.skills,
+          images: project.images,
+          translations: [],
+        };
+
+        const projectTranslation = await database
+          .listDocuments(
+            appwriteEnv.appwrite.databaseId,
+            appwriteEnv.appwrite.collections.proyectsTranslations,
+            [Query.equal("projects", project.$id)],
+          )
+          .then((response) => response.documents);
+
+        newProject.translations = projectTranslation;
+
+        projectsResponseToClient.push(newProject);
+      }),
+    );
+
+    return new Response(
+      JSON.stringify({
+        projectsResponseToClient,
+      }),
+      {
         headers: {
-          "Content-Type": "application/json"
-        }
-      });
-    }
+          "Content-Type": "application/json",
+        },
+      },
+    );
   } catch (error) {
-    console.error("Error creating document:", error);
-    return new Response(JSON.stringify({ error: "Failed to create document" }), {
+    console.error("Error fetching projects with translations:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch projects" }), {
       status: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
   }
 }

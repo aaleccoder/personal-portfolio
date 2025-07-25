@@ -13,7 +13,12 @@ const appwriteEnv = {
       experienceTranslations: String(
         process.env.NEXT_PUBLIC_APPWRITE_EXPERIENCESTRANSLATIONS_COLLECTION_ID,
       ),
+      proyectsTranslations: String(
+        process.env.NEXT_PUBLIC_APPWRITE_PROYECTSTRANSLATIONS_COLLECTIONS_ID,
+      ),
     },
+    config: String(process.env.NEXT_PUBLIC_APPWRITE_CONFIG),
+    config_id: String(process.env.NEXT_PUBLIC_APPWRITE_CONFIG_ID),
   },
 };
 

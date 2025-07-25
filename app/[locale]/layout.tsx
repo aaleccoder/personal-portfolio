@@ -6,6 +6,7 @@ import { Header } from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import CursorFollower from "@/components/cursor-follower";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
+import { ConfigurationProvider } from "@/contexts/ConfigurationContext";
 
 const poppinsSans = Poppins({
   variable: "--font-poppins",
@@ -38,11 +39,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider>
-            <CursorFollower />
-            <Header />
-            {children}
-            {/* <Footer /> */}
-            <ScrollToTopButton />
+            <ConfigurationProvider>
+              <CursorFollower />
+              <Header />
+              {children}
+              {/* <Footer /> */}
+              <ScrollToTopButton />
+            </ConfigurationProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
