@@ -6,53 +6,47 @@ import {
   Mail,
   Instagram,
   Twitter,
-  Facebook,
   Github,
 } from "lucide-react";
 import TypewriterText from "./typewriter";
-import { motion } from "motion/react";
-import { div } from "motion/react-client";
-import Link from "next/link";
-import { useConfiguration } from "@/contexts/ConfigurationContext";
+import { PortfolioProfile } from "@/app/api/configuration/route";
 
-export const Hero = () => {
-  const { configuration, loading, error } = useConfiguration();
+export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => {
+  const t = useTranslations("Hero");
 
   const menu = [
     {
       href: "#about",
-      label: "About",
+      label: t("menuAbout"),
     },
     {
       href: "#skills",
-      label: "Skills",
+      label: t("menuSkills"),
     },
     {
       href: "#pastexperiences",
-      label: "Past experiences",
+      label: t("menuPastExperiences"),
     },
     {
       href: "#projects",
-      label: "Projects",
+      label: t("menuProjects"),
     },
   ];
 
-  const t = useTranslations("Hero");
 
-  const MotionButton = motion(Button);
 
   return (
-    <section className="flex flex-col justify-center mx-auto space-y-4 md:h-[80vh] md:min-h-[70vh] transition-all duration-300 ease-in-out">
+    <section className="flex flex-col justify-center mx-auto space-y-4 md:h-[100vh] md:min-h-[70vh] transition-all duration-300 ease-in-out">
       <div className="space-y-2 flex flex-col max-w-xl mx-auto">
         <TypewriterText
           duration={0.1}
           text={t("greeting")}
-          className="font-sans text-3xl sm:text-4xl md:text-4xl uppercase text-primary"
+          className="font-sans text-4xl md:text-4xl uppercase text-primary"
         />
         <TypewriterText
           delay={2}
           text={t("description")}
-          className="font-sans text-lg sm:text-xl md:text-2xl uppercase text-muted-foreground"
+          className="font-sans text-md sm:text-xl md:text-xl uppercase text-muted-foreground"
         />
       </div>
 
@@ -67,7 +61,7 @@ export const Hero = () => {
             >
               <a
                 href={item.href}
-                className="py-2 px-4 text-lg text-foreground hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 hover:scale-110"
+                className="py-2 px-4 text-sm text-foreground hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 hover:scale-110"
               >
                 <p>{item.label}</p>
               </a>
@@ -78,49 +72,43 @@ export const Hero = () => {
 
       <div className="max-w-xl px-4">
         <div className="space-x-4 font-mono flex">
-          <MotionButton
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 3 }}
+          <Button
             className="p-6 text-xl uppercase hover:scale-110 md:hidden"
           >
             <Briefcase /> {t("projects")}
-          </MotionButton>
-          <MotionButton
-            variant="outline"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 3 }}
+          </Button>
+          <Button
             className="p-6 text-xl uppercase hover:scale-110"
+            variant="outline"
           >
             <Mail /> {t("contact")}
-          </MotionButton>
+          </Button>
         </div>
 
+
+        {/* Contact info */}
+        {configuration?.contact && (
+          <div className="flex flex-col gap-2 mt-4 mb-2">
+            {configuration.contact.email && (
+              <div className="flex items-center gap-2 text-base text-muted-foreground">
+                <Mail className="w-5 h-5 text-primary" />
+                <span>{configuration.contact.email}</span>
+              </div>
+            )}
+            {configuration.contact.phoneNumber && (
+              <div className="flex items-center gap-2 text-base text-muted-foreground">
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm0 14a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2zm14-14a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zm0 14a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                <span>{configuration.contact.phoneNumber}</span>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Social media icons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut", delay: 4 }}
+        <div
           className="flex space-x-4 mt-2"
         >
-          {loading && (
-            <div className="flex space-x-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="p-2 bg-muted rounded-md animate-pulse">
-                  <div className="w-5 h-5 bg-muted-foreground/20 rounded" />
-                </div>
-              ))}
-            </div>
-          )}
-
-          {error && (
-            <div className="text-sm text-destructive">
-              Failed to load social links
-            </div>
-          )}
-
-          {!loading && !error && configuration && (
+          {configuration && (
             <>
               {configuration.socialLinks?.github && (
                 <a
@@ -131,6 +119,28 @@ export const Hero = () => {
                   className="p-2 bg-muted rounded-md"
                 >
                   <Github className="w-5 h-5 hover:text-gray-400" />
+                </a>
+              )}
+              {configuration.socialLinks?.twitter && (
+                <a
+                  href={configuration.socialLinks.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Twitter"
+                  className="p-2 bg-muted rounded-md"
+                >
+                  <Twitter className="w-5 h-5 hover:text-blue-400" />
+                </a>
+              )}
+              {configuration.socialLinks?.instagram && (
+                <a
+                  href={configuration.socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="p-2 bg-muted rounded-md"
+                >
+                  <Instagram className="w-5 h-5 hover:text-pink-500" />
                 </a>
               )}
               {configuration.socialLinks?.linkedin && (
@@ -169,7 +179,7 @@ export const Hero = () => {
               )}
             </>
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

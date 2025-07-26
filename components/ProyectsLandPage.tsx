@@ -3,47 +3,24 @@ import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/dist/client/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { Skeleton } from "./ui/skeleton";
 import { useEffect, useState } from "react";
 
-export const ProyectsLandPage = () => {
-  const [proyects, setProyects] = useState<Project[]>([]);
+export const ProyectsLandPage = ({ proyects }: { proyects: Project[] }) => {
   const locale = usePathname().split("/")[1];
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProyects = async () => {
-      try {
-        const response = await fetch("/api/proyects");
-        const data = await response.json();
-        console.log(data);
-        if (
-          data &&
-          data.projectsResponseToClient &&
-          data.projectsResponseToClient.length > 0
-        ) {
-          setProyects(data.projectsResponseToClient);
-        } else {
-          setProyects([]);
-        }
-      } catch (error) {
-        setProyects([]);
-        console.error("Error fetching proyects:", error);
-      }
-    };
 
-    fetchProyects();
-  }, []);
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl text-primary text-center transition-all duration-300 ease-in-out">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl text-primary text-center transition-all duration-300 ease-in-out ">
         Proyects
       </h2>
       <div className="flex flex-col gap-4">
         {proyects.map((proyect, index) => (
           <div
             key={index}
-            className="flex flex-col md:flex-row cursor-pointer border rounded-lg p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 gap-4"
+            className="md:flex-row cursor-pointer p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
           >
             <div className="flex-shrink-0">
               <a

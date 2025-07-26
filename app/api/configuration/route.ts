@@ -6,6 +6,7 @@ type SocialLinks = {
   github?: string;
   linkedin?: string;
   twitter?: string;
+  instagram?: string;
   website?: string;
 };
 
@@ -20,6 +21,10 @@ type Translations = {
 export type PortfolioProfile = {
   profileImage: string;
   socialLinks: SocialLinks;
+  contact: {
+    email?: string;
+    phoneNumber?: string;
+  };
   translations: Translations;
 };
 

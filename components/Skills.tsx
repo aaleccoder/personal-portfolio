@@ -2,30 +2,18 @@
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Skeleton } from "./ui/skeleton";
 
-type Skills = {
+export type Skills = {
   $id: string;
   name: string;
   icon: string;
   profficiency: number;
 };
 
-export const SkillsComponent = () => {
+export const SkillsComponent = ({ skills }: { skills: Skills[] }) => {
   const t = useTranslations("Skills");
 
-  const [skills, setSkills] = useState<Skills[]>([]);
-
-  useEffect(() => {
-    const fetchSkills = async () => {
-      const response = await fetch("/api/skills", {
-        method: "GET",
-      });
-      const data = await response.json();
-      setSkills(data.documents);
-    };
-
-    fetchSkills();
-  }, []);
 
   return (
     <section className="space-y-10">

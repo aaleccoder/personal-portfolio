@@ -13,13 +13,19 @@
     "experience": "Experiencia"
   },
   "Hero": {
-    "greeting": "Hey, There!",
+    "greeting": "Hey, There! Soy Alejandro",
     "whoami": "Soy Alejandro",
     "description": "Desarrollador Web, Diseñador y Creador",
     "projects": "Proyectos",
     "skills": "Habilidades",
     "commits": "Commits",
-    "stars": "Estrellas GitHub"
+    "stars": "Estrellas GitHub",
+    "contact": "Contáctame",
+    "aboutMe": "Soy un desarrollador de software apasionado por crear aplicaciones web hermosas y funcionales. Me encanta aprender nuevas tecnologías y mejorar mis habilidades. En mi tiempo libre, disfruto hacer senderismo, fotografía y jugar videojuegos. ¡Explora mi portafolio y no dudes en ponerte en contacto!",
+    "menuAbout": "Acerca de",
+    "menuSkills": "Habilidades",
+    "menuPastExperiences": "Experiencias pasadas",
+    "menuProjects": "Proyectos"
   },
   "LanguageSwitcher": {
     "language": "Idioma"
@@ -39,15 +45,6 @@
     "paragraph1": "Soy un desarrollador de software apasionado, enfocado en crear aplicaciones web eficientes y escalables. Mi camino en la tecnología ha sido impulsado por el amor a la resolución de problemas y el aprendizaje continuo.",
     "paragraph2": "Con experiencia en varios lenguajes y frameworks, disfruto construir interfaces amigables y sistemas robustos. Me desenvuelvo bien en entornos colaborativos y siempre estoy listo para nuevos retos."
   },
-
-    "institution1": "Universidad A",
-    "date1": "2014 - 2018",
-    "description1": "Estudié fundamentos de computación y desarrollo de software.",
-    "degree2": "Maestría en Ingeniería de Software",
-    "institution2": "Universidad B",
-    "date2": "2018 - 2020",
-    "description2": "Especialización en prácticas y metodologías de ingeniería de software."
-  },
   "Experience": {
     "title": "Experiencia Laboral",
     "title1": "Ingeniero de Software",
@@ -58,5 +55,15 @@
     "company2": "Otra Empresa Tecnológica",
     "date2": "2018 - 2020",
     "description2": "Construcción de interfaces de usuario con React y TypeScript."
+  },
+  "Story": {
+    "title": "Mi Trayectoria",
+    "description": "Esta es la historia de mi camino como desarrollador.",
+    "Experiences": "Experiencias",
+    "Projects": "Proyectos"
+  },
+  "Loading": {
+    "brand": "Daeralysdev",
+    "message": "Cargando..."
   }
 }

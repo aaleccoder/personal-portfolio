@@ -1,96 +1,97 @@
-"use client";
-import { Hero } from "@/components/hero";
-import { ProyectsLandPage } from "@/components/ProyectsLandPage";
-import { SkillsComponent } from "@/components/Skills";
-import { Story } from "@/components/Story";
-import TypewriterText from "@/components/typewriter";
-import { easeOut, motion } from "framer-motion";
-import { useTranslations, useLocale } from "next-intl";
-import { useConfiguration } from "@/contexts/ConfigurationContext";
+import ContentWrapper from "@/components/ContentWrapper";
+import HomeClient from "@/components/HomeClient";
 
-export default function Home() {
-  const t = useTranslations("Hero");
-  const locale = useLocale();
-  const { configuration, loading, error } = useConfiguration();
 
-  // Get the about me text from configuration based on current locale
-  const getAboutMeText = () => {
-    if (!configuration?.translations) return t("aboutMe"); // fallback to translation
-    return (
-      configuration.translations[locale]?.aboutMe ||
-      configuration.translations["en"]?.aboutMe ||
-      t("aboutMe")
-    );
-  };
+
+async function fetchConfiguration() {
+  try {
+    const response = await fetch(`${process.env.URL}/api/configuration`, {
+      method: "GET",
+      cache: "no-store"
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch configuration: ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (data && data.config && data.config.config) {
+      return JSON.parse(data.config.config);
+    } else {
+      throw new Error("Invalid configuration data structure");
+    }
+  } catch (err) {
+    const errorMessage =
+      err instanceof Error ? err.message : "Failed to fetch configuration";
+    console.error("Configuration fetch error:", err);
+    return null;
+  }
+}
+
+async function fetchSkills() {
+  try {
+    const response = await fetch(`${process.env.URL}/api/skills`, {
+      method: "GET",
+      cache: "no-store"
+    });
+    const data = await response.json();
+    return data.documents || [];
+  } catch (err) {
+    console.error("Skills fetch error:", err);
+    return [];
+  }
+}
+
+async function fetchProyects() {
+  try {
+    const response = await fetch(`${process.env.URL}/api/proyects`, {
+      method: "GET",
+      cache: "no-store"
+    });
+    const data = await response.json();
+    if (
+      data &&
+      data.projectsResponseToClient &&
+      Array.isArray(data.projectsResponseToClient) &&
+      data.projectsResponseToClient.length > 0
+    ) {
+      return data.projectsResponseToClient;
+    } else {
+      return [];
+    }
+  } catch (err) {
+    console.error("Proyects fetch error:", err);
+    return [];
+  }
+}
+async function fetchExperiences() {
+  try {
+    const response = await fetch(`${process.env.URL}/api/experience`, {
+      method: "GET",
+      cache: "no-store"
+    });
+    const data = await response.json();
+    if (data && Array.isArray(data)) {
+      return data;
+    } else if (data?.documents) {
+      return data.documents;
+    } else {
+      return [];
+    }
+  } catch (err) {
+    console.error("Experiences fetch error:", err);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const [skills, experiences, proyects, configuration] = await Promise.all([
+    fetchSkills(),
+    fetchExperiences(),
+    fetchProyects(),
+    fetchConfiguration()
+  ]);
   return (
-    <div className="flex flex-col lg:flex-row font-sans transition-all duration-300 ease-in-out mt-14">
-      {/* Left column - 5/12 width */}
-      <div className="lg:w-5/12 lg:fixed lg:left-0 lg:top-0 lg:h-full lg:overflow-hidden lg:mb-48 transition-all duration-300 ease-in-out md:px-12 mt-14">
-        <Hero />
-      </div>
-
-      {/* Middle column - 2/3 width */}
-      <main className="lg:w-2/3 lg:ml-[41.666667%] p-4 md:px-12 justify-center grid grid-cols-1 mt-4 sm:mt-6 md:mt-8 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 min-h-screen scroll-smooth transition-all duration-300 ease-in-out">
-        <div id="about" className="flex flex-col space-y-4 sm:space-y-6">
-          <TypewriterText
-            text="About"
-            duration={0.05}
-            className="text-2xl sm:text-3xl md:text-4xl text-primary text-center transition-all duration-300 ease-in-out"
-          />
-          <TypewriterText
-            duration={0.02}
-            text={getAboutMeText()}
-            className="font-sans text-sm text-muted-foreground leading-relaxed transition-all duration-300 ease-in-out"
-          />
-        </div>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          id="skills"
-        >
-          <SkillsComponent />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          id="pastexperiences"
-          className="transition-all duration-300 ease-in-out"
-        >
-          <Story />
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          id="projects"
-          className="transition-all duration-300 ease-in-out"
-        >
-          <ProyectsLandPage />
-        </motion.div>
-        <footer className="text-xs sm:text-sm md:text-base text-muted-foreground transition-all duration-300 ease-in-out">
-          <p className="leading-relaxed">
-            Took heavy inspiration from{" "}
-            <a
-              href="https://brittanychiang.com/#about"
-              className="text-primary hover:underline transition-colors duration-200 ease-in-out"
-            >
-              Brittany Chiang
-            </a>
-            . Made with love from Cuba, and to the world, a dreamer with its
-            feet in the ground
-          </p>
-        </footer>
-      </main>
-
-      {/* Right column - will be hidden since we have 1/3 + 2/3 = 100% */}
-      <aside className="lg:w-0 lg:hidden">
-        {/* Right column content - keeping it as it was (empty for now) */}
-      </aside>
-    </div>
-  );
+    <ContentWrapper>
+      <HomeClient skills={skills} experiences={experiences} proyects={proyects} configuration={configuration} />;
+    </ContentWrapper>
+  )
 }

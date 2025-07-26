@@ -10,6 +10,7 @@ import {
 import { useTranslations } from "next-intl";
 import { Models } from "node-appwrite";
 import { usePathname } from "next/navigation";
+import { Skeleton } from "./ui/skeleton";
 
 type Translations = {
   Role: string;
@@ -17,7 +18,7 @@ type Translations = {
   lang: string;
 };
 
-type Experience = {
+export type Experience = {
   $id: string;
   startdate: string;
   role: string;
@@ -27,32 +28,9 @@ type Experience = {
   skills: string[];
 };
 
-export const Story = () => {
+export const Story = ({ experiences }: { experiences: Experience[] }) => {
   const t = useTranslations("Story");
   const locale = usePathname().split("/")[1];
-  const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchExperiences = async () => {
-      try {
-        const response = await fetch("/api/experience");
-        const data = await response.json();
-        if (data && Array.isArray(data)) {
-          setExperiences(data);
-        } else {
-          setExperiences([]);
-        }
-      } catch (err) {
-        setError("Failed to fetch experiences");
-        setExperiences([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchExperiences();
-  }, []);
 
   return (
     <section className="w-full space-y-4">
@@ -60,26 +38,20 @@ export const Story = () => {
         Past Experiences
       </p>
       <div className="w-full mx-auto space-y-4">
-        {loading && (
-          <p className="text-center text-muted-foreground">
-            Loading experiences...
-          </p>
-        )}
-        {error && <p className="text-center text-red-500">{error}</p>}
-        {!loading && !error && experiences && experiences.length === 0 && (
-          <p className="text-center text-muted-foreground">
-            No experiences found.
-          </p>
-        )}
-        {!loading &&
-          !error &&
-          experiences &&
+        {experiences &&
           experiences.map((experience) => (
             <Card
               key={experience.$id}
-              className="cursor-pointer hover:border hover:rounded-lg p-4   hover:shadow-lg transition-all duration-300 hover:scale-105 grid md:grid-cols-4 gap-0 w-full bg-transparent border-none shadow-none"
+              className="cursor-pointer hover:border hover:rounded-lg p-4   hover:shadow-lg transition-all duration-300 hover:scale-105 gap-0 w-full"
             >
               <CardHeader className="flex-shrink-0 w-full flex items-start">
+                <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                  {
+                    experience.translations.find(
+                      (element) => element.lang === locale,
+                    )?.Role
+                  }
+                </CardTitle>
                 <p className="text-xs text-muted-foreground whitespace-nowrap uppercase">
                   {experience.startdate.split("T")[0]}
                   {experience.enddate
@@ -89,19 +61,12 @@ export const Story = () => {
               </CardHeader>
               <div className="col-span-3 space-y-">
                 <CardHeader>
-                  <CardTitle className="text-md text-foreground group-hover:text-primary transition-colors">
-                    {
-                      experience.translations.find(
-                        (element) => element.lang === locale,
-                      )?.Role
-                    }
-                  </CardTitle>
-                  <CardDescription className="text-sm text-muted-foreground">
+                  <CardDescription className="text-muted-foreground text-lg mb-2">
                     <p>{experience.company}</p>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="mt-2 text-xs text-muted-foreground">
+                  <p className="text-muted-foreground">
                     {
                       experience.translations.find(
                         (element) => element.lang === locale,

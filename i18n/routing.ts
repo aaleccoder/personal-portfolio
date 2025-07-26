@@ -15,6 +15,7 @@ export const routing = defineRouting({
   
   // Define pathnames that should be excluded from locale routing
   pathnames: {
+    '/': '/',
     // Admin routes should not be localized
     '/admin': '/admin'
   }
