@@ -71,11 +71,11 @@ export const Proyects = ({ proyects }: { proyects: Project[] }) => {
             const getProjectTranslation = (project: Project) => {
               const translation = project.translations?.find((t: Models.Document) => t.lang === locale);
               return {
-                title: translation?.title || project.translations?.[0]?.title || "Untitled",
+                name: translation?.name || project.translations?.[0]?.name || "Untitled",
                 description: translation?.description || project.translations?.[0]?.description || "No description available."
               };
             }
-            const { title, description } = getProjectTranslation(proyect);
+            const { name, description } = getProjectTranslation(proyect);
             const shortDescription = description.length > 255 ? description.slice(0, 255) + "..." : description;
             const hasMultipleImages = proyect.images && proyect.images.length > 1;
             return (
@@ -98,7 +98,7 @@ export const Proyects = ({ proyects }: { proyects: Project[] }) => {
                           </DialogTrigger>
                           <DialogContent className="max-w-4xl">
                             <DialogHeader>
-                              <DialogTitle>{title}</DialogTitle>
+                              <DialogTitle>{name}</DialogTitle>
                             </DialogHeader>
                             <Carousel className="w-full relative">
                               <CarouselContent>
@@ -141,7 +141,7 @@ export const Proyects = ({ proyects }: { proyects: Project[] }) => {
                   <Card className="bg-transparent shadow-none border-none space-y-4 md:space-y-10 mt-2 md:mt-0 order-2 md:order-1 px-1 md:px-0">
                     <CardHeader className="px-1 md:px-6 pb-2 md:pb-6">
                       <CardTitle>
-                        <p className="text-xl md:text-3xl">{title}</p>
+                        <p className="text-xl md:text-3xl">{name}</p>
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3 md:space-y-5 px-1 md:px-6">
@@ -153,7 +153,7 @@ export const Proyects = ({ proyects }: { proyects: Project[] }) => {
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
-                            <DialogTitle>{title}</DialogTitle>
+                            <DialogTitle>{name}</DialogTitle>
                           </DialogHeader>
                           <DialogDescription>
                             {description}
