@@ -11,6 +11,7 @@ import AnimatedBackground from "@/components/AnimatedBackground";
 const poppinsSans = Poppins({
   variable: "--font-poppins",
   weight: ["300", "500", "700", "900"],
+  subsets: ["latin"]
 });
 
 const geistMono = Geist_Mono({
