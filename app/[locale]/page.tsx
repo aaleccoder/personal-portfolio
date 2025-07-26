@@ -91,7 +91,7 @@ export default async function Home() {
   ]);
   return (
     <ContentWrapper>
-      <HomeClient skills={skills} experiences={experiences} proyects={proyects} configuration={configuration} />;
+      <HomeClient skills={skills} experiences={experiences} proyects={proyects} configuration={configuration} />
     </ContentWrapper>
   )
 }

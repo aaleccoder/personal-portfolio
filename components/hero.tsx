@@ -1,6 +1,7 @@
 "use client";
 import { useTranslations } from "next-intl";
 import { Button } from "./ui/button";
+import { ContactModal } from "./ContactModal";
 import {
   Briefcase,
   Mail,
@@ -77,12 +78,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
           >
             <Briefcase /> {t("projects")}
           </Button>
-          <Button
-            className="p-6 text-xl uppercase hover:scale-110"
-            variant="outline"
-          >
-            <Mail /> {t("contact")}
-          </Button>
+          <ContactModal />
         </div>
 
 

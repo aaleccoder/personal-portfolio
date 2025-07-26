@@ -89,5 +89,5 @@ export default function HomeClient({ skills, experiences, proyects, configuratio
         {/* Right column content - keeping it as it was (empty for now) */}
       </aside>
     </div>
-  );
+  )
 }

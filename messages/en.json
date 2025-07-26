@@ -54,5 +54,24 @@
   "Loading": {
     "brand": "Daeralysdev",
     "message": "Loading..."
+  },
+  "ContactModal": {
+    "title": "Contact Me",
+    "description": "Fill out the form below to send me a message.",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Your email",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Your message",
+    "sending": "Sending...",
+    "sendMessage": "Send Message",
+    "successMessage": "Message sent successfully!",
+    "errorMessage": "Failed to send message. Please try again later.",
+    "validation": {
+      "nameMin": "Name must be at least 2 characters.",
+      "emailInvalid": "Please enter a valid email.",
+      "messageMin": "Message must be at least 10 characters."
+    }
   }
 }
