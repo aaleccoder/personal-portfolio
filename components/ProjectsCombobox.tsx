@@ -26,7 +26,6 @@ export function ProjectsCombobox({ projects, api, locale }: { projects: Project[
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
 
-  console.log("Projects in Combobox:", projects);
 
   const getProjectTranslation = (project: Project) => {
     const translation = project.translations?.find((t: Models.Document) => t.lang === locale);

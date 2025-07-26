@@ -32,6 +32,10 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
       href: "#projects",
       label: t("menuProjects"),
     },
+    {
+      href: "/blog",
+      label: t("menuBlog"),
+    }
   ];
 
 

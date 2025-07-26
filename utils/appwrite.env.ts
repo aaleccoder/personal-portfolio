@@ -16,7 +16,16 @@ const appwriteEnv = {
       proyectsTranslations: String(
         process.env.NEXT_PUBLIC_APPWRITE_PROYECTSTRANSLATIONS_COLLECTIONS_ID,
       ),
+      blogs: String(
+        process.env.NEXT_PUBLIC_APPWRITE_BLOG_COLLECTION_ID),
+      blogTranslations: String(
+        process.env.NEXT_PUBLIC_APPWRITE_BLOG_TRANSLATIONS_COLLECTION_ID,
+      ),
     },
+
+    bucketBlogs: String(
+      process.env.NEXT_PUBLIC_APPWRITE_BLOGS_BUCKET_ID
+    ),
     config: String(process.env.NEXT_PUBLIC_APPWRITE_CONFIG),
     config_id: String(process.env.NEXT_PUBLIC_APPWRITE_CONFIG_ID),
   },

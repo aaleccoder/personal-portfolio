@@ -10,7 +10,8 @@
     "about": "About",
     "skills": "Skills",
     "projects": "Projects",
-    "experience": "Experience"
+    "experience": "Experience",
+    "blogs": "Blogs"
   },
   "Hero": {
     "greeting": "Hey  there!, I'm Alejandro",
@@ -25,7 +26,8 @@
     "menuAbout": "About",
     "menuSkills": "Skills",
     "menuPastExperiences": "Past experiences",
-    "menuProjects": "Projects"
+    "menuProjects": "Projects",
+    "menuBlog": "Blog"
   },
   "LanguageSwitcher": {
     "language": "Language"

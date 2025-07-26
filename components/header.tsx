@@ -3,31 +3,13 @@ import { ModeToggle } from "./theme-toogle";
 import { Button } from "./ui/button";
 
 export const Header = () => {
-  const menu = [
-    {
-      href: "#",
-      label: "Home",
-    },
-    {
-      href: "#pastexperiences",
-      label: "Past experiences",
-    },
-    {
-      href: "#projects",
-      label: "Projects",
-    },
-    {
-      href: "#contact",
-      label: "Contact",
-    },
-  ];
 
   return (
-    <header className="fixed top-0 right-0 z-50">
-      <nav className="flex flex-row justify-between p-4 items-center">
-        {/* <span>
+    <header className="fixed top-0 right-0 z-50 w-full">
+      <nav className="flex flex-row justify-between p-4 items-center w-full">
+        <a href="/">
           <p className="font-bold uppercase">Daeralysdev</p>
-        </span> */}
+        </a>
         <div className="space-x-4 flex flex-row items-center">
           {/* <ModeToggle /> */}
           <LanguageSwitcher />

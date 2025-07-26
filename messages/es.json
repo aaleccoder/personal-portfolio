@@ -25,7 +25,8 @@
     "menuAbout": "Acerca de",
     "menuSkills": "Habilidades",
     "menuPastExperiences": "Experiencias pasadas",
-    "menuProjects": "Proyectos"
+    "menuProjects": "Proyectos",
+    "menuBlog": "Blog"
   },
   "LanguageSwitcher": {
     "language": "Idioma"
