@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Comments from "@/components/Comments";
+import { Clipboard } from "lucide-react";
 
 
 export const BlogEntry = ({ blog }: { blog: BlogsResponse }) => {
@@ -24,6 +25,76 @@ export const BlogEntry = ({ blog }: { blog: BlogsResponse }) => {
   };
 
   const translation = getTranslations(blog);
+
+  if (!translation) {
+    const handleSwitchToEnglish = () => {
+      const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+      const englishUrl = currentUrl.replace(`/${locale}/`, '/en/');
+      window.location.href = englishUrl;
+    };
+
+    const isDevelopment = typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname.includes('localhost'));
+
+    return (
+      <article className="w-full mx-auto px-4 py-8">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+          <div className="max-w-md">
+            <div className="mb-6 p-4 bg-accent/50 rounded-lg border border-border">
+              <h2 className="text-2xl font-bold mb-4 text-muted-foreground">
+                {locale === "es" ? "Contenido no disponible" : "Content not available"}
+              </h2>
+              <p className="text-muted-foreground mb-4">
+                {locale === "es"
+                  ? "Este contenido no está disponible en español."
+                  : "This content is not available in your preferred language."}
+              </p>
+
+              {isDevelopment && (
+                <p className="text-sm text-muted-foreground/80 mb-4">
+                  {locale === "es"
+                    ? "Nota: La traducción automática no funciona en desarrollo (localhost)."
+                    : "Note: Automatic translation doesn't work in development (localhost)."}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-4 justify-center">
+              <button
+                onClick={handleSwitchToEnglish}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              >
+                {locale === "es" ? "Ver versión en inglés" : "View English version"}
+              </button>
+
+              {!isDevelopment && (
+                <button
+                  onClick={() => {
+                    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+                    const englishUrl = currentUrl.replace(`/${locale}/`, '/en/');
+                    window.open(`https://translate.google.com/translate?sl=en&tl=${locale}&u=${encodeURIComponent(englishUrl)}`, '_blank');
+                  }}
+                  className="px-4 py-2 border border-border rounded-md hover:bg-accent transition-colors"
+                >
+                  {locale === "es" ? "Traducir con Google" : "Translate with Google"}
+                </button>
+              )}
+            </div>
+
+            <div className="mt-6 text-sm text-muted-foreground/70">
+              <p>
+                {locale === "es"
+                  ? "Puedes cambiar al idioma inglés para ver el contenido original."
+                  : "You can switch to English to view the original content."}
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="w-full mx-auto px-4 py-8">
@@ -116,9 +187,7 @@ export const BlogEntry = ({ blog }: { blog: BlogsResponse }) => {
                   }}
                   className="p-2 rounded-md bg-transparent hover:bg-accent transition-colors"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6L8.684 7.658m0 0a3 3 0 10-2.684 2.684m2.684-2.684l6.316 3.158m-6.316 0L15.368 9.658m0 0a3 3 0 111.342-2.684 3 3 0 01-.316 1.342m0 2.684L15.368 12m0 0l-6.316 3.158" />
-                  </svg>
+                  <Clipboard />
                 </button>
               </PopoverTrigger>
               <PopoverContent className="w-auto">

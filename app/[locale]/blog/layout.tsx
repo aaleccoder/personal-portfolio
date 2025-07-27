@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function BlogLayout({ children }: { children: React.ReactNode }) {
   const flipOptions = [
-    '', // no flip
+    '',
     'scaleX(-1)',
     'scaleY(-1)',
     'scaleX(-1) scaleY(-1)',
@@ -43,7 +43,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
 
   function renderFileTree(items: typeof breadcrumbItems) {
     return (
-      <ul className="flex flex-col items-start px-2 w-full space-y-4 contain-content mt-2">
+      <ul className="flex flex-col items-start px-2 w-full space-y-4 contain-content mt-2" suppressHydrationWarning>
         {items.map((item, idx) => {
           const isLast = idx === items.length - 1;
           const Icon = isLast ? FileText : Folder;

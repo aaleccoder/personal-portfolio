@@ -13,7 +13,6 @@ import { Checkbox } from "./ui/checkbox";
 
 
 export const Blog = ({ blogs }: { blogs: BlogSummary[] }) => {
-  // Collect all unique tags from blogs
   const allTags = Array.from(new Set(blogs.flatMap(blog => Array.isArray(blog.tags) ? blog.tags : [])));
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -21,7 +20,6 @@ export const Blog = ({ blogs }: { blogs: BlogSummary[] }) => {
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  // Sort blogs by $updatedAt whenever sortOrder changes
   const sortedBlogs = [...blogs].sort((a, b) => {
     const dateA = new Date(a.$updatedAt).getTime();
     const dateB = new Date(b.$updatedAt).getTime();
@@ -32,13 +30,11 @@ export const Blog = ({ blogs }: { blogs: BlogSummary[] }) => {
 
   useEffect(() => {
     let filtered = [...blogs];
-    // Filter by selected tags if any
     if (selectedTags.length > 0) {
       filtered = filtered.filter(blog =>
         Array.isArray(blog.tags) && blog.tags.some(tag => selectedTags.includes(tag))
       );
     }
-    // Sort by recency
     const sorted = filtered.sort((a, b) => {
       const dateA = new Date(a.$updatedAt).getTime();
       const dateB = new Date(b.$updatedAt).getTime();
@@ -80,27 +76,25 @@ export const Blog = ({ blogs }: { blogs: BlogSummary[] }) => {
                   </SelectTrigger>
                   <SelectContent>
                     {allTags.map(tag => (
-                      <SelectItem key={tag} value={tag}>
-                        <div className="flex items-center gap-2" onClick={e => e.stopPropagation()}>
-                          <Checkbox
-                            checked={selectedTags.includes(tag)}
-                            onCheckedChange={checked => {
-                              if (checked) {
-                                setSelectedTags([...selectedTags, tag]);
-                              } else {
-                                setSelectedTags(selectedTags.filter(t => t !== tag));
-                              }
-                            }}
-                          />
-                          <span>{tag}</span>
-                        </div>
-                      </SelectItem>
+                      <div key={tag} className="flex items-center gap-2 px-2 py-1 hover:bg-accent hover:text-accent-foreground cursor-pointer" onClick={e => e.stopPropagation()}>
+                        <Checkbox
+                          checked={selectedTags.includes(tag)}
+                          onCheckedChange={checked => {
+                            if (checked) {
+                              setSelectedTags([...selectedTags, tag]);
+                            } else {
+                              setSelectedTags(selectedTags.filter(t => t !== tag));
+                            }
+                          }}
+                        />
+                        <span>{tag}</span>
+                      </div>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
-                <Select value={sortOrder} onValueChange={() => { }}>
+                <Select value={sortOrder} onValueChange={(value) => setSortOrder(value as "asc" | "desc")}>
                   <SelectTrigger className="w-[12rem] cursor-pointer">
                     <SelectValue>
                       <div className="flex items-center gap-2">
@@ -109,12 +103,17 @@ export const Blog = ({ blogs }: { blogs: BlogSummary[] }) => {
                       </div>
                     </SelectValue>
                   </SelectTrigger>
-                  {/* Only one option shown, clicking toggles sortOrder */}
                   <SelectContent>
-                    <SelectItem value={sortOrder} onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
+                    <SelectItem value="asc">
                       <div className="flex items-center gap-2">
-                        {sortOrder === "asc" ? <ArrowUpIcon className="w-4 h-4" /> : <ArrowDownIcon className="w-4 h-4" />}
-                        Recency {sortOrder === "asc" ? "(Oldest)" : "(Newest)"}
+                        <ArrowUpIcon className="w-4 h-4" />
+                        Recency (Oldest)
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="desc">
+                      <div className="flex items-center gap-2">
+                        <ArrowDownIcon className="w-4 h-4" />
+                        Recency (Newest)
                       </div>
                     </SelectItem>
                   </SelectContent>

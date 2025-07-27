@@ -1,7 +1,38 @@
+import { Metadata } from "next";
 import ContentWrapper from "@/components/ContentWrapper";
 import HomeClient from "@/components/HomeClient";
 
+export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+  const locale = params.locale;
 
+  const metadataByLocale = {
+    en: {
+      title: "Daeralysdev - Full Stack Developer",
+      description: "Welcome to my personal portfolio. I'm a full stack developer passionate about creating amazing web experiences with modern technologies.",
+    },
+    es: {
+      title: "Daeralysdev - Desarrollador Full Stack",
+      description: "Bienvenido a mi portafolio personal. Soy un desarrollador full stack apasionado por crear experiencias web increíbles con tecnologías modernas.",
+    },
+  };
+
+  const activeMetadata = metadataByLocale[locale as keyof typeof metadataByLocale] || metadataByLocale.en;
+
+  return {
+    title: activeMetadata.title,
+    description: activeMetadata.description,
+    openGraph: {
+      title: activeMetadata.title,
+      description: activeMetadata.description,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: activeMetadata.title,
+      description: activeMetadata.description,
+    },
+  };
+}
 
 async function fetchConfiguration() {
   try {
