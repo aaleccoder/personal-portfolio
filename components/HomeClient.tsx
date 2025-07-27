@@ -7,10 +7,12 @@ import TypewriterText from "@/components/typewriter";
 import { motion } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 
-import { Project } from "@/app/api/proyects/route"
+import { Project } from "@/app/api/proyects/route";
 import type { Skills } from "@/components/Skills";
 import { PortfolioProfile } from "@/app/api/configuration/route";
-export default function HomeClient({ skills, experiences, proyects, configuration }: { skills: Skills[]; experiences: Experience[]; proyects: Project[]; configuration: PortfolioProfile }) {
+import { BlogSummary } from "@/app/api/blog/route";
+import { BlogsStarred } from "./BlogsStarred";
+export default function HomeClient({ skills, experiences, proyects, configuration, blogs }: { skills: Skills[]; experiences: Experience[]; proyects: Project[]; configuration: PortfolioProfile, blogs: BlogSummary[] }) {
   const t = useTranslations("Hero");
   const locale = useLocale();
 
@@ -27,8 +29,8 @@ export default function HomeClient({ skills, experiences, proyects, configuratio
         <Hero configuration={configuration} />
       </div>
 
-      <main className="lg:w-2/3 lg:ml-[41.666667%] px-4 md:px-12 justify-center grid grid-cols-1 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 min-h-screen scroll-smooth transition-all duration-300 ease-in-out">
-        <div id="about" className="flex flex-col space-y-4 sm:space-y-6 mt-12">
+      <main className="lg:w-2/3 lg:ml-[41.666667%] px-2 md:px-12 justify-center grid grid-cols-1 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 min-h-screen scroll-smooth transition-all duration-300 ease-in-out">
+        <div id="about" className="flex flex-col space-y-4 sm:space-y-6 mt-12 px-4">
           <TypewriterText
             text={t("about")}
             duration={0.01}
@@ -66,6 +68,16 @@ export default function HomeClient({ skills, experiences, proyects, configuratio
           className="transition-all duration-300 ease-in-out"
         >
           <ProyectsLandPage proyects={proyects} />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, margin: "-10%" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          id="blogs"
+          className="transition-all duration-300 ease-in-out"
+        >
+          <BlogsStarred blogs={blogs} />
         </motion.div>
         <footer className="text-xs sm:text-sm md:text-base text-muted-foreground transition-all duration-300 ease-in-out hover:text-xl cursor-zoom-in mb-12">
           <p className="leading-relaxed">

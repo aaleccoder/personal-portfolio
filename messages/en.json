@@ -70,6 +70,9 @@
     "Experiences": "Experiences",
     "Projects": "Projects"
   },
+  "Blogs": {
+    "title": "Starred Blogs"
+  },
   "Loading": {
     "brand": "Daeralysdev",
     "message": "Loading..."

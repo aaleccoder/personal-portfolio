@@ -1,7 +1,6 @@
 "use client";
 import { BlogSummary } from "@/app/api/blog/route";
-import { usePathname } from "next/navigation";
-import MarkdownHooks from "react-markdown"
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,11 +11,20 @@ import { Checkbox } from "./ui/checkbox";
 
 
 
-export const Blog = ({ blogs }: { blogs: BlogSummary[] }) => {
+interface BlogProps {
+  blogs: BlogSummary[];
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+}
+
+export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
   const allTags = Array.from(new Set(blogs.flatMap(blog => Array.isArray(blog.tags) ? blog.tags : [])));
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const locale = usePathname().split("/")[1] || "en";
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
@@ -166,6 +174,39 @@ export const Blog = ({ blogs }: { blogs: BlogSummary[] }) => {
           ))}
         </div>
       </section>
-    </div >
+      
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          <button
+            onClick={() => {
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('page', (currentPage - 1).toString());
+              router.push(`${window.location.pathname}?${params.toString()}`);
+            }}
+            disabled={currentPage <= 1}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90"
+          >
+            Previous
+          </button>
+          
+          <span className="px-4 py-2">
+            Page {currentPage} of {totalPages}
+          </span>
+          
+          <button
+            onClick={() => {
+              const params = new URLSearchParams(searchParams.toString());
+              params.set('page', (currentPage + 1).toString());
+              router.push(`${window.location.pathname}?${params.toString()}`);
+            }}
+            disabled={currentPage >= totalPages}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90"
+          >
+            Next
+          </button>
+        </div>
+      )}
+    </div>
   )
 }

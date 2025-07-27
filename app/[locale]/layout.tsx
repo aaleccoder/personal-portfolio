@@ -79,7 +79,7 @@ export default function RootLayout({
         >
           <NextIntlClientProvider>
             {/* <AnimatedBackground /> */}
-            {/* <CursorFollower /> */}
+            <CursorFollower />
             <Header />
             <div style={{ position: "relative", zIndex: 1 }} className="mt-12">
               {children}

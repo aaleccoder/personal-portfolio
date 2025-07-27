@@ -2,14 +2,20 @@
 
 import { Metadata } from "next";
 import { Blog } from "@/components/Blogs";
+import ContentWrapper from "@/components/ContentWrapper";
 
-const fetchBlogs = async () => {
+const fetchBlogs = async (page: number = 1, limit: number = 10, starred?: boolean) => {
   try {
-    const response = await fetch(`${process.env.URL}/api/blog`);
+    let url = `${process.env.URL}/api/blog?page=${page}&limit=${limit}`;
+    if (starred !== undefined) {
+      url += `&starred=${starred}`;
+    }
+    const response = await fetch(url);
     const data = await response.json();
     return data;
   } catch (error) {
     console.log("Error fetching blogs:", error);
+    return [];
   }
 }
 
@@ -45,17 +51,36 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-export default async function BlogsPage({ params }: { params: { locale: string } }) {
-  const [blogs] = await Promise.all([fetchBlogs()]);
+interface BlogsPageProps {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ page?: string; limit?: string; starred?: string }>;
+}
+
+export default async function BlogsPage({ params, searchParams }: BlogsPageProps) {
+  const { locale } = await params;
+  const searchParamsData = await searchParams;
+  
+  const currentPage = parseInt(searchParamsData.page || '1');
+  const itemsPerPage = parseInt(searchParamsData.limit || '10');
+  const starredFilter = searchParamsData.starred ? searchParamsData.starred === 'true' : undefined;
+  
+  const [blogs] = await Promise.all([fetchBlogs(currentPage, itemsPerPage, starredFilter)]);
+  
+  // For now, we'll assume total pages based on current results
+  // In a real app, you'd get this from the API response
+  const totalPages = Math.max(1, Math.ceil(blogs.length / itemsPerPage));
 
   return (
     <main className="font-sans transition-all duration-300 ease-in-out">
-      <Blog blogs={blogs} />
+      <ContentWrapper>
+        <Blog 
+          blogs={blogs} 
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
+      </ContentWrapper>
     </main>
   )
 }
-
-
-
 
 

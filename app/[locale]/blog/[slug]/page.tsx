@@ -3,6 +3,7 @@
 import { Metadata } from "next";
 import { BlogsResponse } from "@/app/api/blog/[slug]/route";
 import { BlogEntry } from "@/components/BlogEntry";
+import ContentWrapper from "@/components/ContentWrapper";
 
 const fetchBlogEntry = async (slug: string) => {
   try {
@@ -52,9 +53,11 @@ export default async function BlogEntryPage({ params }: { params: { slug: string
   const [blogEntryData] = await Promise.all([fetchBlogEntry(params.slug)]);
 
   return (
-    <section className="w-full
+    <main className="w-full
      font-sans transition-all duration-300 ease-in-out gap-6 space-y-4">
-      <BlogEntry blog={blogEntryData} />
-    </section>
+      <ContentWrapper>
+        <BlogEntry blog={blogEntryData} />
+      </ContentWrapper>
+    </main>
   )
 }

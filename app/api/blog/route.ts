@@ -18,15 +18,34 @@ export type BlogSummary = {
   cover: string;
   translations: BlogTranslationSummary[];
   tags: string[];
+  starred: boolean
 };
 
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const starred = searchParams.get('starred');
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+
     const database = new Databases(client);
+
+    const queries = [];
+
+    if (starred !== null) {
+      queries.push(Query.equal('starred', starred === 'true'));
+    }
+
+    const offset = (page - 1) * limit;
+    queries.push(Query.limit(limit));
+    queries.push(Query.offset(offset));
+    queries.push(Query.orderDesc('$createdAt'));
+
     const blogs = await database.listDocuments(
       appwriteEnv.appwrite.databaseId,
-      appwriteEnv.appwrite.collections.blogs
+      appwriteEnv.appwrite.collections.blogs,
+      queries
     ).then((response) => response.documents);
 
     const blogSummaries: BlogSummary[] = await Promise.all(
@@ -48,7 +67,8 @@ export async function GET() {
           $createdAt: blog.$createdAt,
           $updatedAt: blog.$updatedAt,
           translations: translationSummaries,
-          tags: blog.tags || []
+          tags: blog.tags || [],
+          starred: blog.starred || false
         };
       })
     );

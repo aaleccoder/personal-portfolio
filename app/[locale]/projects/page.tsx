@@ -1,3 +1,4 @@
+import ContentWrapper from "@/components/ContentWrapper";
 import { Proyects } from "@/components/Proyects";
 
 const fetchProjects = async () => {
@@ -20,8 +21,10 @@ export default async function ProyectsPage() {
   const projects = await fetchProjects();
   console.log(projects);
   return (
-    <div>
-      <Proyects proyects={projects} />
-    </div>
+    <main>
+      <ContentWrapper>
+        <Proyects proyects={projects} />
+      </ContentWrapper>
+    </main>
   )
 }

@@ -1,31 +1,42 @@
-import { Project } from "@/app/api/proyects/route";
+import { BlogSummary, BlogTranslationSummary } from "@/app/api/blog/route";
 import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/dist/client/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Skeleton } from "./ui/skeleton";
-import { Models } from "node-appwrite";
 import { useTranslations } from "next-intl";
 
-export const ProyectsLandPage = ({ proyects }: { proyects: Project[] }) => {
-  const t = useTranslations("Proyects");
+interface BlogsStarredProps {
+  blogs?: BlogSummary[];
+  limit?: number;
+}
+
+export const BlogsStarred = ({ blogs, limit }: BlogsStarredProps) => {
+  const t = useTranslations("Blogs");
   const locale = usePathname().split("/")[1];
 
-  const getProjectTranslation = (project: Project) => {
-    const translation = project.translations?.find(
-      (t: Models.Document) => t.lang === locale,
+  const starredBlogs = blogs?.filter(blog => blog.starred) || [];
+
+  const displayedBlogs = limit ? starredBlogs.slice(0, limit) : starredBlogs;
+
+  const getBlogTranslation = (blog: BlogSummary) => {
+    const translation = blog.translations?.find(
+      (t: BlogTranslationSummary) => t.lang === locale,
     );
     return {
-      name:
-        translation?.name ||
-        project.translations?.[0]?.name ||
+      title:
+        translation?.title ||
+        blog.translations?.[0]?.title ||
         "Untitled",
-      description:
-        translation?.description ||
-        project.translations?.[0]?.description ||
-        "No description available.",
+      summary:
+        translation?.summary ||
+        blog.translations?.[0]?.summary ||
+        "No summary available.",
     };
   };
+
+  if (displayedBlogs.length === 0) {
+    return null; // Don't render anything if no starred blogs
+  }
 
   return (
     <section className="w-full space-y-4">
@@ -33,20 +44,19 @@ export const ProyectsLandPage = ({ proyects }: { proyects: Project[] }) => {
         {t("title")}
       </p>
       <div className="w-full mx-auto space-y-4">
-        {proyects.map((proyect, index) => {
-          const { name, description } = getProjectTranslation(proyect);
+        {displayedBlogs.map((blog, index) => {
+          const { title, summary } = getBlogTranslation(blog);
           return (
             <Link
               key={index}
-              href={proyect.project_link}
-              target="_blank"
+              href={`/blog/${blog.slug}`}
               rel="noopener noreferrer"
               className="hover:border hover:rounded-3xl hover:border-primary hover:shadow-lg transition-all duration-300 w-full bg-card hover:bg-transparent rounded-xl flex flex-col md:flex-row gap-4 px-4 py-4 md:px-6 md:py-4"
             >
               <div className="rounded-xl w-full md:w-auto">
                 <Image
-                  src={proyect.images[0]}
-                  alt={name || "Project Image"}
+                  src={blog.cover}
+                  alt={title || "Blog Image"}
                   className="object-cover w-full md:w-[16rem] h-48 md:h-full rounded-md"
                   width={256}
                   height={256}
@@ -55,16 +65,16 @@ export const ProyectsLandPage = ({ proyects }: { proyects: Project[] }) => {
               <div className="flex-1 space-y-2">
                 <div className="flex-shrink-0 w-full flex items-start">
                   <h3 className="text-xl font-semibold text-foreground !group-hover:text-primary transition-colors">
-                    {name}
+                    {title}
                   </h3>
                 </div>
                 <div>
                   <p className="text-muted-foreground text-base md:text-lg mb-2">
-                    {description}
+                    {summary}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  {proyect.skills?.map((tech, techIndex) => (
+                  {blog.tags?.map((tech, techIndex) => (
                     <span
                       key={techIndex}
                       className="px-2 py-1 bg-secondary/30 text-foreground rounded-xl text-sm"
@@ -78,10 +88,10 @@ export const ProyectsLandPage = ({ proyects }: { proyects: Project[] }) => {
           );
         })}
         <Link
-          href="/projects"
+          href="/blog"
           className="text-muted-foreground hover:underline flex flex-row space-x-2 hover:text-foreground transition-all duration-300"
         >
-          <p>View Projects</p>
+          <p>View Blogs</p>
           <ExternalLinkIcon />
         </Link>
       </div>

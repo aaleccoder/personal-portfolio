@@ -64,6 +64,9 @@
     "Experiences": "Experiencias",
     "Projects": "Proyectos"
   },
+  "Blogs": {
+    "title": "Blogs Destacados"
+  },
   "Loading": {
     "brand": "Daeralysdev",
     "message": "Cargando..."

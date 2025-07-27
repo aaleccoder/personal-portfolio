@@ -93,6 +93,21 @@ async function fetchProyects() {
     return [];
   }
 }
+
+async function fetchBlogs() {
+  try {
+    const response = await fetch(`${process.env.URL}/api/blog?starred=true`, {
+      method: "GET",
+      cache: "no-store"
+    });
+    const data = await response.json();
+    return data || [];
+  } catch (err) {
+    console.error("Blogs fetch error:", err);
+    return [];
+  }
+}
+
 async function fetchExperiences() {
   try {
     const response = await fetch(`${process.env.URL}/api/experience`, {
@@ -114,15 +129,16 @@ async function fetchExperiences() {
 }
 
 export default async function Home() {
-  const [skills, experiences, proyects, configuration] = await Promise.all([
+  const [skills, experiences, proyects, configuration, blogs] = await Promise.all([
     fetchSkills(),
     fetchExperiences(),
     fetchProyects(),
-    fetchConfiguration()
+    fetchConfiguration(),
+    fetchBlogs()
   ]);
   return (
     <ContentWrapper>
-      <HomeClient skills={skills} experiences={experiences} proyects={proyects} configuration={configuration} />
+      <HomeClient skills={skills} experiences={experiences} proyects={proyects} configuration={configuration} blogs={blogs} />
     </ContentWrapper>
   )
 }

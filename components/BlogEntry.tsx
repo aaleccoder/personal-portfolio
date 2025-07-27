@@ -6,7 +6,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import Comments from "@/components/Comments";
 import { Clipboard } from "lucide-react";
 
-
 export const BlogEntry = ({ blog }: { blog: BlogsResponse }) => {
 
   const locale = usePathname().split("/")[1] || "en";
@@ -99,6 +98,15 @@ export const BlogEntry = ({ blog }: { blog: BlogsResponse }) => {
   return (
     <article className="w-full mx-auto px-4 py-8">
       <header className="mb-6 border-b pb-4">
+        {blog.cover && (
+          <div className="mb-6">
+            <img
+              src={blog.cover}
+              alt={translation?.title || "Blog cover"}
+              className="w-full h-64 md:h-96 object-cover rounded-lg shadow-md"
+            />
+          </div>
+        )}
         <h1 className="text-4xl font-titles uppercase font-black mb-2 text-start text-primary">{translation?.title}</h1>
         <h2 className="text-xl font-semibold mb-2 text-muted-foreground">{translation?.summary}</h2>
         <div className="flex flex-col gap-4 text-sm text-muted-foreground mt-2">
@@ -116,7 +124,53 @@ export const BlogEntry = ({ blog }: { blog: BlogsResponse }) => {
         </div>
       </header>
       <section className="prose prose-invert prose-lg max-w-none">
-        <ReactMarkdown>{translation?.content || ""}</ReactMarkdown>
+        <ReactMarkdown
+          // @ts-ignore
+          components={{
+            // @ts-ignore
+            img: ({ src, alt }) => (
+              <img
+                src={src}
+                alt={alt || "Image"}
+                className="w-full max-w-2xl mx-auto h-auto rounded-lg shadow-md my-4"
+                style={{ maxHeight: '400px', objectFit: 'cover' }}
+              />
+            ),
+            h1: ({ children }) => (
+              <h1 className="text-3xl font-bold mt-6 mb-4 text-primary">{children}</h1>
+            ),
+            h2: ({ children }) => (
+              <h2 className="text-2xl font-bold mt-5 mb-3 text-primary">{children}</h2>
+            ),
+            h3: ({ children }) => (
+              <h3 className="text-xl font-bold mt-4 mb-2 text-primary">{children}</h3>
+            ),
+            p: ({ children }) => (
+              <p className="mb-4 leading-relaxed">{children}</p>
+            ),
+            ul: ({ children }) => (
+              <ul className="list-disc list-inside mb-4 ml-4">{children}</ul>
+            ),
+            ol: ({ children }) => (
+              <ol className="list-decimal list-inside mb-4 ml-4">{children}</ol>
+            ),
+            blockquote: ({ children }) => (
+              <blockquote className="border-l-4 border-primary pl-4 italic my-4 text-muted-foreground">
+                {children}
+              </blockquote>
+            ),
+            code: ({ children }) => (
+              <code className="bg-accent/50 px-1 py-0.5 rounded text-sm">{children}</code>
+            ),
+            pre: ({ children }) => (
+              <pre className="bg-accent/50 p-4 rounded-lg overflow-x-auto my-4">
+                {children}
+              </pre>
+            )
+          }}
+        >
+          {translation?.content || ""}
+        </ReactMarkdown>
       </section>
 
       <section>
