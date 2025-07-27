@@ -36,7 +36,7 @@ export const ProyectsLandPage = ({ proyects }: { proyects: Project[] }) => {
           return (
             <div
               key={index}
-              className="md:flex-row cursor-pointer p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+              className="hover:border hover:rounded-3xl hover:border-primary p-4 hover:shadow-lg transition-all duration-300 cursor-pointer gap-0 w-full bg-card hover:scale-102 hover:bg-transparent rounded-xl"
             >
               <div className="flex-shrink-0">
                 <a

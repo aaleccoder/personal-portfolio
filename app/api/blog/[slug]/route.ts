@@ -25,14 +25,18 @@ export type BlogsResponse = Pick<Blogs, "tags" | "slug" | "cover"> & {
   translations: BlogsTranslation[];
 };
 
-export async function GET(request: Request, { params }: { params: { slug: string } }) {
+// ...existing code...
+
+export async function GET(request: Request, context: { params: Promise<{ slug: string }> }) {
   try {
+    const { params } = context;
+    const resolvedParams = await params;
     const database = new Databases(client);
 
     const blogList = await database.listDocuments(
       appwriteEnv.appwrite.databaseId,
       appwriteEnv.appwrite.collections.blogs,
-      [Query.equal("slug", params.slug)]
+      [Query.equal("slug", resolvedParams.slug)]
     ).then((response) => response.documents) as Blogs[];
 
     if (!blogList || blogList.length === 0) {
@@ -41,7 +45,6 @@ export async function GET(request: Request, { params }: { params: { slug: string
 
     const blog = blogList[0];
 
-    // Fetch translations for the blog
     const blogsTranslation: BlogsTranslation[] = await database.listDocuments(
       appwriteEnv.appwrite.databaseId,
       appwriteEnv.appwrite.collections.blogTranslations,

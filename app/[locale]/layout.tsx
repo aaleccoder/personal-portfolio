@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import CursorFollower from "@/components/cursor-follower";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import AnimatedBackground from "@/components/AnimatedBackground";
+import Image from "next/image";
 
 const poppinsSans = Poppins({
   variable: "--font-poppins",
@@ -29,21 +30,53 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const flipOptions = [
+    '', // no flip
+    'scaleX(-1)', // horizontal flip
+    'scaleY(-1)', // vertical flip
+    'scaleX(-1) scaleY(-1)', // both flips
+  ];
+  const randomFlip = flipOptions[Math.floor(Math.random() * flipOptions.length)];
+
+  // Parallax animation keyframes
+  const parallaxStyle = `
+    @keyframes parallaxMove {
+      0% { transform: ${randomFlip} translateY(0px) scale(1); }
+      25% { transform: ${randomFlip} translateY(-20px) scale(1.03); }
+      50% { transform: ${randomFlip} translateY(0px) scale(1.06); }
+      75% { transform: ${randomFlip} translateY(20px) scale(1.03); }
+      100% { transform: ${randomFlip} translateY(0px) scale(1); }
+    }
+    .parallax-bg {
+      animation: parallaxMove 30s ease-in-out infinite;
+    }
+  `;
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body
-        className={`${poppinsSans.variable} ${geistMono.variable} antialiased bg-radial from-primary/20 to-primary/10 scroll-smooth`}
-      >
+      <body className={`${poppinsSans.variable} ${geistMono.variable} antialiased scroll-smooth `} style={{ position: "relative", minHeight: "100vh" }}>
+        <style>{parallaxStyle}</style>
+        <div style={{ position: "fixed", inset: 0, zIndex: 0, width: "100vw", height: "100vh", pointerEvents: "none" }} >
+          <Image
+            src="/localhost_3000_en.png"
+            alt="Background"
+            fill
+            className="parallax-bg"
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            priority={true}
+          />
+        </div>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           disableTransitionOnChange
         >
           <NextIntlClientProvider>
-            <AnimatedBackground />
-            <CursorFollower />
+            {/* <AnimatedBackground /> */}
+            {/* <CursorFollower /> */}
             <Header />
-            {children}
+            <div style={{ position: "relative", zIndex: 1 }}>
+              {children}
+            </div>
             {/* <Footer /> */}
             <ScrollToTopButton />
           </NextIntlClientProvider>

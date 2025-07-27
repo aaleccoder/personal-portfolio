@@ -42,10 +42,10 @@ export const Story = ({ experiences }: { experiences: Experience[] }) => {
           experiences.map((experience) => (
             <Card
               key={experience.$id}
-              className="cursor-pointer hover:border hover:rounded-lg p-4   hover:shadow-lg transition-all duration-300 hover:scale-105 gap-0 w-full"
+              className="hover:border hover:rounded-3xl hover:border-primary p-4 hover:shadow-lg transition-all duration-300 gap-0 w-full hover:bg-transparent"
             >
               <CardHeader className="flex-shrink-0 w-full flex items-start">
-                <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <CardTitle className="text-lg font-semibold text-foreground !group-hover:text-primary transition-colors">
                   {
                     experience.translations.find(
                       (element) => element.lang === locale,
@@ -74,15 +74,15 @@ export const Story = ({ experiences }: { experiences: Experience[] }) => {
                     }
                   </p>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="">
                   <div className="flex flex-wrap gap-1">
                     {experience.skills?.map((tech, techIndex) => (
-                      <span
+                      <p
                         key={techIndex}
-                        className="px-2 py-1 bg-secondary/30  text-foreground rounded-xl text-xs"
+                        className="px-2 py-1 bg-secondary/30 text-foreground rounded-xl "
                       >
                         {tech}
-                      </span>
+                      </p>
                     ))}
                   </div>
                 </CardFooter>

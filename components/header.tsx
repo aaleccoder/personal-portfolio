@@ -10,6 +10,7 @@ export const Header = () => {
         <a href="/">
           <p className="font-bold uppercase">Daeralysdev</p>
         </a>
+
         <div className="space-x-4 flex flex-row items-center">
           {/* <ModeToggle /> */}
           <LanguageSwitcher />

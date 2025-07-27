@@ -36,10 +36,10 @@ export default function AnimatedBackground() {
     return arr;
   }, []);
 
-  // Memoize SVG circles for performance
+  // Memoize static SVG circles for performance
   const memoizedCircles = useMemo(() => (
     particles.map((p) => (
-      <motion.circle
+      <circle
         suppressHydrationWarning
         key={p.id}
         cx={p.x}
@@ -53,29 +53,14 @@ export default function AnimatedBackground() {
           willChange: "transform, opacity, filter",
           transform: "translateZ(0)", // triggers GPU acceleration
         }}
-        initial={{
-          r: p.size / 30,
-          opacity: 0.3,
-        }}
-        animate={{
-          r: p.size / 20,
-          opacity: 0.5,
-        }}
-        transition={{
-          repeat: Infinity,
-          repeatType: "mirror",
-          duration: p.duration,
-          delay: p.delay,
-          ease: "easeInOut",
-        }}
       />
     ))
   ), [particles]);
 
-  // Memoize blurred divs for performance
+  // Memoize static blurred divs for performance
   const memoizedBlurDivs = useMemo(() => (
     particles.slice(0, 4).map((p) => (
-      <motion.div
+      <div
         suppressHydrationWarning
         key={"blurred-" + p.id}
         style={{
@@ -92,24 +77,12 @@ export default function AnimatedBackground() {
           willChange: "transform, opacity, filter",
           transform: "translateZ(0)", // triggers GPU acceleration
         }}
-        initial={{ scale: 0.9, opacity: 0.15 }}
-        animate={{ scale: 1.1, opacity: 0.25 }}
-        transition={{
-          repeat: Infinity,
-          repeatType: "mirror",
-          duration: p.duration * 1.5,
-          delay: p.delay,
-          ease: "easeInOut",
-        }}
       />
     ))
   ), [particles]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+    <div
       aria-hidden="true"
       style={{
         position: "fixed",
@@ -136,6 +109,6 @@ export default function AnimatedBackground() {
       </svg>
       {/* Extra floating blurred shapes */}
       {memoizedBlurDivs}
-    </motion.div>
+    </div>
   );
 }

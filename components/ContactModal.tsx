@@ -92,7 +92,7 @@ export function ContactModal() {
           <Mail /> {tHero("contact")}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-card">
+      <DialogContent className="sm:max-w-[425px] bg-card/70 backdrop-blur-xs">
         <DialogHeader>
           <DialogTitle className="text-primary">{t("title")}</DialogTitle>
           <DialogDescription className="text-muted-foreground">

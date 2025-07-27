@@ -69,24 +69,14 @@ export default function HomeClient({ skills, experiences, proyects, configuratio
         >
           <ProyectsLandPage proyects={proyects} />
         </motion.div>
-        <footer className="text-xs sm:text-sm md:text-base text-muted-foreground transition-all duration-300 ease-in-out">
+        <footer className="text-xs sm:text-sm md:text-base text-muted-foreground transition-all duration-300 ease-in-out hover:text-xl cursor-zoom-in">
           <p className="leading-relaxed">
-            Took heavy inspiration from{" "}
-            <a
-              href="https://brittanychiang.com/#about"
-              className="text-primary hover:underline transition-colors duration-200 ease-in-out"
-            >
-              Brittany Chiang
-            </a>
-            . Made with love from Cuba, and to the world, a dreamer with its
-            feet in the ground
+            {useTranslations("Footer")("inspiration")}
           </p>
         </footer>
       </main>
 
-      {/* Right column - will be hidden since we have 1/3 + 2/3 = 100% */}
       <aside className="lg:w-0 lg:hidden">
-        {/* Right column content - keeping it as it was (empty for now) */}
       </aside>
     </div>
   )

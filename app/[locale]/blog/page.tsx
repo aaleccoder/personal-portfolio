@@ -6,7 +6,6 @@ const fetchBlogs = async () => {
   try {
     const response = await fetch(`${process.env.URL}/api/blog`);
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.log("Error fetching blogs:", error);
