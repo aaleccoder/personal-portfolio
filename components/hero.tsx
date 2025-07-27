@@ -44,7 +44,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
 
   return (
     <section className="flex flex-col justify-center mx-auto space-y-4 md:h-[100vh] md:min-h-[70vh] transition-all duration-300 ease-in-out mt-8 md:mt-0">
-      <div className="space-y-2 flex flex-col max-w-xl mx-auto px-4">
+      <div className="space-y-2 flex flex-col max-w-xl px-4">
         <TypewriterText
           duration={0.1}
           text={t("greeting")}
