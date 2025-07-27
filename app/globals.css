@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -169,22 +168,6 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Typography scale for unified text sizes (dark mode) */
-  --text-title: 2.25rem; /* 4xl */
-  --text-title-weight: 700;
-  --text-title-tracking: var(--tracking-tight);
-
-  --text-subtitle: 1.5rem; /* 2xl */
-  --text-subtitle-weight: 600;
-  --text-subtitle-tracking: var(--tracking-tight);
-
-  --text-paragraph: 1rem; /* base */
-  --text-paragraph-weight: 400;
-  --text-paragraph-tracking: var(--tracking-normal);
-
-  --text-small: 0.75rem; /* xs */
-  --text-small-weight: 400;
-  --text-small-tracking: var(--tracking-normal);
 
   --shadow-2xs: var(--shadow-2xs);
   --shadow-xs: var(--shadow-xs);
@@ -203,9 +186,6 @@
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
 }
 
-body {
-  letter-spacing: var(--tracking-normal);
-}
 
 @layer base {
   * {
@@ -217,97 +197,3 @@ body {
   }
 }
 
-/* Loading animations */
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes spin-slow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes gradient-shift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animate-shimmer {
-  animation: shimmer 2s infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-spin-slow {
-  animation: spin-slow 3s linear infinite;
-}
-
-.animate-gradient-shift {
-  animation: gradient-shift 3s ease infinite;
-  background-size: 200% 200%;
-}
-
-/* Smooth transitions for loading states */
-.loading-transition {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Custom scrollbar for loading elements */
-.loading-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-
-.loading-scrollbar::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-}
-
-.loading-scrollbar::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary));
-  border-radius: 2px;
-}
-
-.loading-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.8);
-}

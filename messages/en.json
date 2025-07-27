@@ -1,4 +1,8 @@
 {
+  "Blog": {
+    "createdAt": "Created at",
+    "updatedAt": "Updated at"
+  },
   "HomePage": {
     "helloWorld": "Hello World",
     "welcomeMessage": "Welcome to my portfolio!",

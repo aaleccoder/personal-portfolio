@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 export const Header = () => {
 
   return (
-    <header className="fixed top-0 right-0 z-50 w-full">
+    <header className="fixed top-0 right-0 z-50 w-full bg-card/30 backdrop-blur">
       <nav className="flex flex-row justify-between p-4 items-center w-full">
         <a href="/">
           <p className="font-bold uppercase">Daeralysdev</p>
