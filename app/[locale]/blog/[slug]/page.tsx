@@ -15,8 +15,9 @@ const fetchBlogEntry = async (slug: string) => {
   }
 }
 
-export async function generateMetadata({ params }: { params: { slug: string; locale: string } }): Promise<Metadata> {
-  const blogEntryData: BlogsResponse = await fetchBlogEntry(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string; locale: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const blogEntryData: BlogsResponse = await fetchBlogEntry(resolvedParams.slug);
 
   if (!blogEntryData || !blogEntryData.translations || blogEntryData.translations.length === 0) {
     return {
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: { params: { slug: string; loc
     };
   }
 
-  const translation = blogEntryData.translations.find(t => t.lang === params.locale);
+  const translation = blogEntryData.translations.find(t => t.lang === resolvedParams.locale);
 
   const activeTranslation = translation || blogEntryData.translations[0];
 
@@ -49,8 +50,9 @@ export async function generateMetadata({ params }: { params: { slug: string; loc
   };
 }
 
-export default async function BlogEntryPage({ params }: { params: { slug: string } }) {
-  const [blogEntryData] = await Promise.all([fetchBlogEntry(params.slug)]);
+export default async function BlogEntryPage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
+  const resolvedParams = await params;
+  const [blogEntryData] = await Promise.all([fetchBlogEntry(resolvedParams.slug)]);
 
   return (
     <main className="w-full

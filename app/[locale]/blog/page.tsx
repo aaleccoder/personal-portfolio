@@ -19,8 +19,9 @@ const fetchBlogs = async (page: number = 1, limit: number = 10, starred?: boolea
   }
 }
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const locale = params.locale;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale;
 
   const metadataByLocale = {
     en: {
@@ -56,16 +57,17 @@ interface BlogsPageProps {
   searchParams: Promise<{ page?: string; limit?: string; starred?: string }>;
 }
 
+// Promise params
 export default async function BlogsPage({ params, searchParams }: BlogsPageProps) {
-  const { locale } = await params;
-  const searchParamsData = await searchParams;
-  
-  const currentPage = parseInt(searchParamsData.page || '1');
-  const itemsPerPage = parseInt(searchParamsData.limit || '10');
-  const starredFilter = searchParamsData.starred ? searchParamsData.starred === 'true' : undefined;
-  
+  const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
+
+  const currentPage = parseInt(resolvedSearchParams.page || '1');
+  const itemsPerPage = parseInt(resolvedSearchParams.limit || '10');
+  const starredFilter = resolvedSearchParams.starred ? resolvedSearchParams.starred === 'true' : undefined;
+
   const [blogs] = await Promise.all([fetchBlogs(currentPage, itemsPerPage, starredFilter)]);
-  
+
   // For now, we'll assume total pages based on current results
   // In a real app, you'd get this from the API response
   const totalPages = Math.max(1, Math.ceil(blogs.length / itemsPerPage));
@@ -73,8 +75,8 @@ export default async function BlogsPage({ params, searchParams }: BlogsPageProps
   return (
     <main className="font-sans transition-all duration-300 ease-in-out">
       <ContentWrapper>
-        <Blog 
-          blogs={blogs} 
+        <Blog
+          blogs={blogs}
           currentPage={currentPage}
           totalPages={totalPages}
         />

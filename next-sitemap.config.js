@@ -1,5 +1,13 @@
-export const siteUrl = `${process.env.URL}`;
-export const generateRobotsTxt = true;
-export const changefreq = 'weekly';
-export const priority = 0.7;
-export const sitemapSize = 5000;
+const siteUrl = process.env.URL || 'https://your-domain.com';
+const generateRobotsTxt = true;
+const changefreq = 'weekly';
+const priority = 0.7;
+const sitemapSize = 5000;
+
+module.exports = {
+  siteUrl,
+  generateRobotsTxt,
+  changefreq,
+  priority,
+  sitemapSize,
+};

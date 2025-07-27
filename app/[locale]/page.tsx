@@ -2,8 +2,9 @@ import { Metadata } from "next";
 import ContentWrapper from "@/components/ContentWrapper";
 import HomeClient from "@/components/HomeClient";
 
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
-  const locale = params.locale;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale;
 
   const metadataByLocale = {
     en: {
