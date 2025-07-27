@@ -1,4 +1,8 @@
 {
+  "Blog": {
+    "createdAt": "Creado el",
+    "updatedAt": "Actualizado el"
+  },
   "HomePage": {
     "helloWorld": "Hola Mundo",
     "welcomeMessage": "¡Bienvenido a mi portafolio!",
@@ -10,16 +14,18 @@
     "about": "Acerca de",
     "skills": "Habilidades",
     "projects": "Proyectos",
-    "experience": "Experiencia"
+    "experience": "Experiencia",
+    "blogs": "Blogs"
   },
   "Hero": {
-    "greeting": "Hey, There! Soy Alejandro",
+    "greeting": "¡Hola! Soy Alejandro",
     "whoami": "Soy Alejandro",
+    "about": "Un poco sobre mí",
     "description": "Desarrollador Web, Diseñador y Creador",
     "projects": "Proyectos",
     "skills": "Habilidades",
     "commits": "Commits",
-    "stars": "Estrellas GitHub",
+    "stars": "Estrellas en GitHub",
     "contact": "Contáctame",
     "aboutMe": "Soy un desarrollador de software apasionado por crear aplicaciones web hermosas y funcionales. Me encanta aprender nuevas tecnologías y mejorar mis habilidades. En mi tiempo libre, disfruto hacer senderismo, fotografía y jugar videojuegos. ¡Explora mi portafolio y no dudes en ponerte en contacto!",
     "menuAbout": "Acerca de",
@@ -39,7 +45,18 @@
     "inspiration": "Inspirado fuertemente en Brittany Chiang. Hecho con amor desde Cuba, y para el mundo, un soñador con los pies en la tierra."
   },
   "Proyects": {
-    "title": "Proyectos"
+    "title": "Proyectos",
+    "tableHeaders": {
+      "year": "Año",
+      "projectName": "Nombre del Proyecto",
+      "description": "Descripción",
+      "skills": "Habilidades",
+      "link": "Enlace"
+    },
+    "defaults": {
+      "untitled": "Sin título",
+      "noDescription": "Sin descripción disponible."
+    }
   },
   "AboutMe": {
     "title": "Sobre mí",
