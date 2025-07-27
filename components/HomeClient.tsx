@@ -23,20 +23,18 @@ export default function HomeClient({ skills, experiences, proyects, configuratio
   };
   return (
     <div className="flex flex-col lg:flex-row font-sans transition-all duration-300 ease-in-out">
-      {/* Left column - 5/12 width */}
       <div className="lg:w-5/12 lg:fixed lg:left-0 lg:top-0 lg:h-full lg:overflow-hidden lg:mb-48 transition-all duration-300 ease-in-out md:px-12">
         <Hero configuration={configuration} />
       </div>
 
-      {/* Middle column - 2/3 width */}
       <main className="lg:w-2/3 lg:ml-[41.666667%] px-4 md:px-12 justify-center grid grid-cols-1 space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24 min-h-screen scroll-smooth transition-all duration-300 ease-in-out">
         <div id="about" className="flex flex-col space-y-4 sm:space-y-6 mt-12">
           <TypewriterText
-            text="About"
+            text={t("about")}
             duration={0.01}
-            className="text-2xl sm:text-3xl md:text-4xl text-primary text-center transition-all duration-300 ease-in-out"
+            className="text-2xl md:text-3xl text-primary text-center transition-all duration-300 ease-in-out font-titles font-black uppercase"
           />
-          <p className="font-sans text-sm text-muted-foreground leading-relaxed transition-all duration-300 ease-in-out">
+          <p className="font-sans text-muted-foreground leading-relaxed transition-all duration-300 ease-in-out">
             {getAboutMeText()}
           </p>
         </div>
@@ -69,9 +67,27 @@ export default function HomeClient({ skills, experiences, proyects, configuratio
         >
           <ProyectsLandPage proyects={proyects} />
         </motion.div>
-        <footer className="text-xs sm:text-sm md:text-base text-muted-foreground transition-all duration-300 ease-in-out hover:text-xl cursor-zoom-in">
+        <footer className="text-xs sm:text-sm md:text-base text-muted-foreground transition-all duration-300 ease-in-out hover:text-xl cursor-zoom-in mb-12">
           <p className="leading-relaxed">
-            {useTranslations("Footer")("inspiration")}
+            {locale === 'es' ? (
+              <>Tomé gran inspiración de <a
+                href="https://brittanychiang.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-primary hover:text-primary/80 transition-all duration-200 hover:scale-105 inline-block"
+              >
+                Brittany Chiang
+              </a>. Hecho con amor desde Cuba, y para el mundo, un soñador con los pies en la tierra.</>
+            ) : (
+              <>Took heavy inspiration from <a
+                href="https://brittanychiang.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-primary hover:text-primary/80 transition-all duration-200 hover:scale-105 inline-block"
+              >
+                Brittany Chiang
+              </a>. Made with love from Cuba, and to the world, a dreamer with its feet in the ground.</>
+            )}
           </p>
         </footer>
       </main>

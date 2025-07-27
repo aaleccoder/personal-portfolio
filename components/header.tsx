@@ -1,15 +1,14 @@
+import Link from "next/link";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { ModeToggle } from "./theme-toogle";
-import { Button } from "./ui/button";
 
 export const Header = () => {
 
   return (
-    <header className="fixed top-0 right-0 z-50 w-full bg-card/30 backdrop-blur">
+    <header className="fixed top-0 right-0 z-50 w-full">
       <nav className="flex flex-row justify-between p-4 items-center w-full">
-        <a href="/">
-          <p className="font-bold uppercase">Daeralysdev</p>
-        </a>
+        <Link href="/">
+          <p className="font-titles font-black uppercase">Daeralysdev</p>
+        </Link>
 
         <div className="space-x-4 flex flex-row items-center">
           {/* <ModeToggle /> */}
@@ -40,7 +39,7 @@ export const Header = () => {
             <DropdownMenuContent className="w-56" align="start">
               {menu.map((item) => (
                 <DropdownMenuItem key={item.href} asChild>
-                  <a href={item.href}>{item.label}</a>
+                  <Link href={item.href}>{item.label}</Link>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>

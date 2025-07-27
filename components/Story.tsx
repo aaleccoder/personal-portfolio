@@ -34,8 +34,8 @@ export const Story = ({ experiences }: { experiences: Experience[] }) => {
 
   return (
     <section className="w-full space-y-4">
-      <p className="text-2xl sm:text-3xl md:text-4xl text-primary text-center transition-all duration-300 ease-in-out">
-        Past Experiences
+      <p className="text-2xl  uppercase md:text-3xl text-primary text-center transition-all duration-300 ease-in-out font-titles font-black">
+        {t("title")}
       </p>
       <div className="w-full mx-auto space-y-4">
         {experiences &&
@@ -45,28 +45,28 @@ export const Story = ({ experiences }: { experiences: Experience[] }) => {
               className="hover:border hover:rounded-3xl hover:border-primary p-4 hover:shadow-lg transition-all duration-300 gap-0 w-full hover:bg-transparent"
             >
               <CardHeader className="flex-shrink-0 w-full flex items-start">
-                <CardTitle className="text-lg font-semibold text-foreground !group-hover:text-primary transition-colors">
+                <CardTitle className="text-xl font-semibold text-foreground !group-hover:text-primary transition-colors">
                   {
                     experience.translations.find(
                       (element) => element.lang === locale,
                     )?.Role
                   }
                 </CardTitle>
-                <p className="text-xs text-muted-foreground whitespace-nowrap uppercase">
-                  {experience.startdate.split("T")[0]}
-                  {experience.enddate
-                    ? ` - ${experience.enddate.split("T")[0]}`
-                    : ""}
-                </p>
               </CardHeader>
-              <div className="col-span-3 space-y-">
+              <div className="col-span-3 space-y-2">
                 <CardHeader>
                   <CardDescription className="text-muted-foreground text-lg mb-2">
-                    <p>{experience.company}</p>
+                    <p className="text-xl">{experience.company}</p>
+                    <p className="text-muted-foreground text-base whitespace-nowrap">
+                      {experience.startdate.split("T")[0]}
+                      {experience.enddate
+                        ? ` - ${experience.enddate.split("T")[0]}`
+                        : " - Present"}
+                    </p>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground text-lg">
                     {
                       experience.translations.find(
                         (element) => element.lang === locale,

@@ -24,7 +24,7 @@ export default function Loading() {
           style={{ color: "var(--primary)" }}
         />
         <span
-          className="text-4xl font-extrabold text-center"
+          className="text-4xl font-titles font-black text-center"
           style={{ color: "var(--primary)" }}
         >
           {t("brand")}

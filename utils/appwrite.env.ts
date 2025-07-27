@@ -21,6 +21,7 @@ const appwriteEnv = {
       blogTranslations: String(
         process.env.NEXT_PUBLIC_APPWRITE_BLOG_TRANSLATIONS_COLLECTION_ID,
       ),
+      newsLetter: String(process.env.NEXT_PUBLIC_APPWRITE_NEWSLETTER)
     },
 
     bucketBlogs: String(

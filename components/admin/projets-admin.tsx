@@ -74,7 +74,7 @@ export const ProjectsAdmin = () => {
                 title={proyect.project_link}
               >
                 View Project
-              </a>
+              </Link>
               <div className="flex justify-start items-start gap-2 w-full flex-wrap max-h-[2.5rem] overflow-auto">
                 {proyect.skills.map((skill) => (
                   <span key={skill} className="rounded-md bg-primary p-2 text-xs truncate max-w-[5rem]" title={skill}>

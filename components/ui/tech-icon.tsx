@@ -25,7 +25,7 @@ export const TechIcon = ({ icon, name, url, className = "w-7 h-7" }: TechIconPro
           height={28}
           className={className}
         />
-      </a>
+      </Link>
     </Button>
   );
 };

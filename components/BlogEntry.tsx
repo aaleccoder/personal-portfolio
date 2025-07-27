@@ -99,7 +99,7 @@ export const BlogEntry = ({ blog }: { blog: BlogsResponse }) => {
   return (
     <article className="w-full mx-auto px-4 py-8">
       <header className="mb-6 border-b pb-4">
-        <h1 className="text-4xl font-bold mb-2 text-start text-primary">{translation?.title}</h1>
+        <h1 className="text-4xl font-titles uppercase font-black mb-2 text-start text-primary">{translation?.title}</h1>
         <h2 className="text-xl font-semibold mb-2 text-muted-foreground">{translation?.summary}</h2>
         <div className="flex flex-col gap-4 text-sm text-muted-foreground mt-2">
           <div className="flex gap-4">

@@ -17,7 +17,7 @@ export const SkillsComponent = ({ skills }: { skills: Skills[] }) => {
 
   return (
     <section className="space-y-10">
-      <h2 className="text-2xl sm:text-3xl md:text-4xl text-primary text-center transition-all duration-300 ease-in-out">
+      <h2 className="text-2xl md:text-3xl uppercase text-primary text-center transition-all duration-300 ease-in-out font-titles font-black">
         {t("title")}
       </h2>
       <div className="space-y-4">

@@ -9,17 +9,43 @@ export type Project = {
   skills: string[];
   images: string[];
   translations: Models.Document[];
+  starred: boolean;
+  date: Date;
 };
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const database = new Databases(client);
 
-    // Fetch all projects
+    // Get query parameters
+    const searchParams = request.nextUrl.searchParams;
+    const starred = searchParams.get('starred');
+    const page = searchParams.get('page');
+
+    // Set up pagination
+    const itemsPerPage = 10;
+    const currentPage = page ? parseInt(page) : 1;
+    const offset = (currentPage - 1) * itemsPerPage;
+
+    // Build queries array
+    const queries = [];
+
+    // Add starred filter if provided
+    if (starred !== null) {
+      const starredBool = starred === 'true';
+      queries.push(Query.equal('starred', starredBool));
+    }
+
+    // Add pagination
+    queries.push(Query.limit(itemsPerPage));
+    queries.push(Query.offset(offset));
+
+    // Fetch projects with filters and pagination
     const projectsResponse = await database
       .listDocuments(
         appwriteEnv.appwrite.databaseId,
         appwriteEnv.appwrite.collections.proyects,
+        queries
       )
       .then((response) => response.documents);
 
@@ -33,6 +59,8 @@ export async function GET() {
           skills: project.skills,
           images: project.images,
           translations: [],
+          starred: project.starred,
+          date: project.date,
         };
 
         const projectTranslation = await database

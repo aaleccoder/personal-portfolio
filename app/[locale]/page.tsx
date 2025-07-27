@@ -73,7 +73,7 @@ async function fetchSkills() {
 
 async function fetchProyects() {
   try {
-    const response = await fetch(`${process.env.URL}/api/proyects`, {
+    const response = await fetch(`${process.env.URL}/api/proyects?starred=true`, {
       method: "GET",
       cache: "no-store"
     });

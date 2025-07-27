@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Poppins } from "next/font/google";
+import { Sora, Space_Grotesk, Orbitron } from "next/font/google";
 import "../globals.css";
 import { NextIntlClientProvider } from "next-intl";
 import { Header } from "@/components/header";
@@ -9,14 +9,21 @@ import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import Image from "next/image";
 
-const poppinsSans = Poppins({
-  variable: "--font-poppins",
-  weight: ["300", "500", "700", "900"],
+const sora = Sora({
+  variable: "--font-sora",
+  weight: ["300", "500", "700", "800"],
   subsets: ["latin"]
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const orbitron = Orbitron({
+  variable: "--font-orbitron",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"]
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  weight: ["300", "500", "700"],
   subsets: ["latin"],
 });
 
@@ -53,7 +60,7 @@ export default function RootLayout({
   `;
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${poppinsSans.variable} ${geistMono.variable} antialiased scroll-smooth `} style={{ position: "relative", minHeight: "100vh" }}>
+      <body className={`${sora.variable} ${orbitron.variable} ${spaceGrotesk.variable} antialiased scroll-smooth `} style={{ position: "relative", minHeight: "100vh" }}>
         <style>{parallaxStyle}</style>
         <div style={{ position: "fixed", inset: 0, zIndex: 0, width: "100vw", height: "100vh", pointerEvents: "none" }} >
           <Image

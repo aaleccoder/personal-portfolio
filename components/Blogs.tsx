@@ -122,27 +122,45 @@ export const Blog = ({ blogs }: { blogs: BlogSummary[] }) => {
             </div>
           </div>
         </div>
-        <div className="md:grid md:grid-cols-3 lg:grid-cols-4">
-
+        <div className="space-y-4">
           {blogsState.map((blog) => (
-            <Link href={`/blog/${blog.slug}`} key={blog.$id} className="block mb-6">
-              <Card key={blog.$id} className="cursor-pointer hover:border hover:rounded-lg hover:shadow-lg transition-all duration-300 hover:scale-105 gap-0 w-full">
-                <CardHeader>
-                  <Image src={blog.cover} alt={getTranslations(blog)?.title || "blog image"} width={500} height={300} className="object-cover" />
-                  <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">{getTranslations(blog)?.title || "Blog Title"}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-muted-foreground text-lg mb-2">{getTranslations(blog)?.summary || "No summary available."}</CardDescription>
-                </CardContent>
-                <CardFooter>
-                  {Array.isArray(blog.tags) && blog.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {blog.tags.map(tag => (
-                        <span key={tag} className="bg-accent text-xs px-2 py-1 rounded">{tag}</span>
-                      ))}
-                    </div>
-                  )}
-                </CardFooter>
+            <Link href={`/blog/${blog.slug}`} key={blog.$id} className="block">
+              <Card key={blog.$id} className="hover:border hover:rounded-3xl hover:border-primary p-4 hover:shadow-lg transition-all duration-300 cursor-pointer gap-0 w-full bg-card hover:scale-102 hover:bg-transparent rounded-xl">
+                <div className="flex flex-col sm:flex-row">
+                  <div className="sm:w-1/3 sm:min-w-[200px] h-full">
+                    <Image
+                      src={blog.cover}
+                      alt={getTranslations(blog)?.title || "blog image"}
+                      width={400}
+                      height={300}
+                      className="object-cover w-full h-full sm:rounded-l-lg"
+                    />
+                  </div>
+                  <div className="flex-1 py-6">
+                    <CardHeader>
+                      <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                        {getTranslations(blog)?.title || "Blog Title"}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-muted-foreground text-base mb-2 line-clamp-3">
+                        {getTranslations(blog)?.summary || "No summary available."}
+                      </CardDescription>
+                    </CardContent>
+                    <CardFooter className="flex flex-col items-start gap-2">
+                      {Array.isArray(blog.tags) && blog.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {blog.tags.map(tag => (
+                            <span key={tag} className="bg-accent text-xs px-2 py-1 rounded">{tag}</span>
+                          ))}
+                        </div>
+                      )}
+                      <div className="text-sm text-muted-foreground">
+                        {new Date(blog.$updatedAt).toLocaleDateString()}
+                      </div>
+                    </CardFooter>
+                  </div>
+                </div>
               </Card>
             </Link>
           ))}

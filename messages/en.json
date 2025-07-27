@@ -20,6 +20,7 @@
   "Hero": {
     "greeting": "Hey  there!, I'm Alejandro",
     "whoami": "I am Alejandro",
+    "about": "A little bit about me",
     "description": "Web Developer, Designer, and Creator",
     "projects": "Projects",
     "skills": "Skills",
@@ -37,14 +38,25 @@
     "language": "Language"
   },
   "Skills": {
-    "title": "Skills"
+    "title": "This is what i work with"
   },
   "Footer": {
     "copy": "Daeralysdev Portfolio. Made with ❤️ in Holguin, Cuba.",
-    "inspiration": "Took heavy inspiration from Brittany Chiang. Made with love from Cuba, and to the world, a dreamer with its feet in the ground."
+    "inspiration": "Took heavy inspiration from {name}. Made with love from Cuba, and to the world, a dreamer with its feet in the ground."
   },
   "Proyects": {
-    "title": "Projects"
+    "title": "Projects",
+    "tableHeaders": {
+      "year": "Year",
+      "projectName": "Project Name",
+      "description": "Description",
+      "skills": "Skills",
+      "link": "Link"
+    },
+    "defaults": {
+      "untitled": "Untitled",
+      "noDescription": "No description available."
+    }
   },
   "AboutMe": {
     "title": "About Me",

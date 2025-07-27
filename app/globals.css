@@ -35,9 +35,10 @@
   --sidebar-accent-foreground: oklch(0.3912 0.0845 240.8759);
   --sidebar-border: oklch(0.9276 0.0058 264.5313);
   --sidebar-ring: oklch(0.6056 0.2189 292.7172);
-  --font-sans: Inter, sans-serif;
+  --font-sans: Sora, sans-serif;
   --font-serif: serif;
-  --font-mono: monospace;
+  --font-mono: Space_Grotesk, monospace;
+  --font-titles: Orbitron, sans-serif;
   --radius: 0.5rem;
   --shadow-2xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.03);
   --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.03);
@@ -106,9 +107,10 @@
   --sidebar-accent-foreground: oklch(0.2935 0.0632 243.1571);
   --sidebar-border: oklch(0.2781 0.0296 256.848);
   --sidebar-ring: oklch(0.709 0.1592 293.5412);
-  --font-sans: Poppins, sans-serif;
+  --font-sans: Sora, sans-serif;
   --font-serif: serif;
-  --font-mono: monospace;
+  --font-mono: Space_Grotesk, monospace;
+  --font-titles: Orbitron, sans-serif;
   --radius: 0.5rem;
   --shadow-2xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
@@ -162,6 +164,7 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
+  --font-titles: var(--font-titles);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
