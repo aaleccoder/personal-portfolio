@@ -20,7 +20,7 @@ export default function ContentWrapper({ children }: { children: React.ReactNode
       initial="hidden"
       animate="visible"
       variants={variants}
-      className="min-h-screen p-4 md:px-12 mt-14"
+      className="min-h-screen"
     >
       {children}
     </motion.div>
