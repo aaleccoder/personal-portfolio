@@ -1,5 +1,5 @@
 import appwriteEnv from "@/utils/appwrite.env";
-import client from "@/utils/supabase/appwrite/server";
+import client from "@/utils/server";
 import { Databases, Models, Query } from "node-appwrite";
 import { Storage } from "node-appwrite";
 

@@ -1,5 +1,4 @@
 "use client";
-import { BlogSummary } from "@/app/api/blog/route";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import Image from "next/image";
@@ -8,6 +7,7 @@ import { ArrowDownIcon, ArrowUpIcon, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Checkbox } from "./ui/checkbox";
+import { BlogSummary } from '@/lib/data';
 
 
 
@@ -174,7 +174,7 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
           ))}
         </div>
       </section>
-      
+
       {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 mt-8">
@@ -189,11 +189,11 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
           >
             Previous
           </button>
-          
+
           <span className="px-4 py-2">
             Page {currentPage} of {totalPages}
           </span>
-          
+
           <button
             onClick={() => {
               const params = new URLSearchParams(searchParams.toString());

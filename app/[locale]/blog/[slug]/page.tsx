@@ -5,8 +5,12 @@ import { BlogEntry } from "@/components/BlogEntry";
 import ContentWrapper from "@/components/ContentWrapper";
 import { fetchBlogBySlug } from "@/lib/data";
 
-export async function generateMetadata({ params }: { params: { slug: string; locale: string } }): Promise<Metadata> {
-  const blogEntryData = await fetchBlogBySlug(params.slug);
+interface Props {
+  params: Promise<{ slug: string; locale: string }>;
+}
+
+export async function generateMetadata({ params }: Props) {
+  const blogEntryData = await fetchBlogBySlug((await params).slug);
 
   if (!blogEntryData || !blogEntryData.translations || blogEntryData.translations.length === 0) {
     return {
@@ -15,7 +19,7 @@ export async function generateMetadata({ params }: { params: { slug: string; loc
     };
   }
 
-  const translation = blogEntryData.translations.find(t => t.lang === params.locale);
+  const translation = blogEntryData.translations.find(async t => t.lang === (await (await params).locale));
 
   const activeTranslation = translation || blogEntryData.translations[0];
 
@@ -39,8 +43,10 @@ export async function generateMetadata({ params }: { params: { slug: string; loc
   };
 }
 
-export default async function BlogEntryPage({ params }: { params: { slug: string; locale: string } }) {
-  const blogEntryData = await fetchBlogBySlug(params.slug);
+
+
+export default async function BlogEntryPage({ params }: Props) {
+  const blogEntryData = await fetchBlogBySlug((await params).slug);
 
   return (
     <main className="w-full
