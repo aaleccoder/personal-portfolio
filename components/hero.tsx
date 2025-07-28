@@ -11,10 +11,10 @@ import {
   Phone,
 } from "lucide-react";
 import TypewriterText from "./typewriter";
-import { PortfolioProfile } from "@/app/api/configuration/route";
+import { PortfolioProfile } from "@/lib/data";
 import Link from "next/link";
 
-export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => {
+export const Hero = ({ configuration }: { configuration: PortfolioProfile | null }) => {
   const t = useTranslations("Hero");
 
   const menu = [
@@ -43,12 +43,12 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
 
 
   return (
-    <section className="flex flex-col justify-center mx-auto space-y-4 md:h-[100vh] md:min-h-[70vh] transition-all duration-300 ease-in-out mt-8 md:mt-0">
-      <div className="space-y-2 flex flex-col max-w-xl px-4">
+    <section className="flex flex-col justify-center mx-auto md:h-[100vh] md:min-h-[70vh] transition-all duration-300 ease-in-out mb-32 md:mt-0">
+      <div className="space-y-2 flex flex-col px-4 mt-8">
         <TypewriterText
           duration={0.1}
           text={t("greeting")}
-          className="font-titles font-black text-5xl uppercase text-primary"
+          className="font-titles font-black text-4xl uppercase text-primary"
         />
         <TypewriterText
           delay={2}
@@ -121,7 +121,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub"
-                  className="p-2 bg-muted rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
+                  className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
                   <Github className="w-5 h-5 hover:text-gray-400" />
                 </Link>
@@ -132,7 +132,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Twitter"
-                  className="p-2 bg-muted rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
+                  className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
                   <Twitter className="w-5 h-5 hover:text-blue-400" />
                 </Link>
@@ -143,7 +143,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="p-2 bg-muted rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
+                  className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
                   <Instagram className="w-5 h-5 hover:text-pink-500" />
                 </Link>
@@ -154,7 +154,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="LinkedIn"
-                  className="p-2 bg-muted rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
+                  className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
                   <svg
                     className="w-5 h-5 hover:text-blue-600"
@@ -171,7 +171,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile }) => 
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Website"
-                  className="p-2 bg-muted rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
+                  className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
                   <svg
                     className="w-5 h-5 hover:text-green-500"

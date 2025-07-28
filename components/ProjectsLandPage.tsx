@@ -1,14 +1,14 @@
-import { Project } from "@/app/api/proyects/route";
 import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/dist/client/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
-import { Models } from "node-appwrite";
 import { useTranslations } from "next-intl";
+import { Project } from "@/lib/data";
+import { Models } from "node-appwrite";
 
-export const ProyectsLandPage = ({ proyects }: { proyects: Project[] }) => {
-  const t = useTranslations("Proyects");
+export const ProjectsLandPage = ({ projects }: { projects: Project[] }) => {
+  const t = useTranslations("Projects");
   const locale = usePathname().split("/")[1];
 
   const getProjectTranslation = (project: Project) => {
@@ -33,41 +33,35 @@ export const ProyectsLandPage = ({ proyects }: { proyects: Project[] }) => {
         {t("title")}
       </p>
       <div className="w-full mx-auto space-y-4">
-        {proyects.map((proyect, index) => {
-          const { name, description } = getProjectTranslation(proyect);
+        {projects.map((project: Project, index: number) => {
+          const { name, description } = getProjectTranslation(project);
           return (
             <Link
               key={index}
-              href={proyect.project_link}
+              href={project.project_link}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:border hover:rounded-3xl hover:border-primary hover:shadow-lg transition-all duration-300 w-full bg-card hover:bg-transparent rounded-xl flex flex-col md:flex-row gap-4 px-4 py-4 md:px-6 md:py-4"
             >
-              <div className="rounded-xl w-full md:w-auto">
+              <div className="w-full md:w-1/3 h-48 md:h-auto rounded-lg overflow-hidden">
                 <Image
-                  src={proyect.images[0]}
-                  alt={name || "Project Image"}
-                  className="object-cover w-full md:w-[16rem] h-48 md:h-full rounded-md"
-                  width={256}
-                  height={256}
+                  src={project.images[0]}
+                  alt={name}
+                  width={500}
+                  height={500}
+                  className="w-full h-full object-cover"
                 />
               </div>
-              <div className="flex-1 space-y-2">
-                <div className="flex-shrink-0 w-full flex items-start">
-                  <h3 className="text-xl font-semibold text-foreground !group-hover:text-primary transition-colors">
-                    {name}
-                  </h3>
-                </div>
+              <div className="w-full md:w-2/3 flex flex-col justify-between">
                 <div>
-                  <p className="text-muted-foreground text-base md:text-lg mb-2">
-                    {description}
-                  </p>
+                  <h3 className="text-xl font-bold">{name}</h3>
+                  <p className="text-muted-foreground mt-2">{description}</p>
                 </div>
-                <div className="flex flex-wrap gap-1">
-                  {proyect.skills?.map((tech, techIndex) => (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {project.skills.map((tech: string, techIndex: number) => (
                     <span
                       key={techIndex}
-                      className="px-2 py-1 bg-secondary/30 text-foreground rounded-xl text-sm"
+                      className="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-1 rounded-full"
                     >
                       {tech}
                     </span>

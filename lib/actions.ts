@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+"use server";
+
+import { z } from "zod";
 import nodemailer from "nodemailer";
-import * as z from "zod";
 
 const formSchema = z.object({
   name: z.string().min(2),
@@ -8,10 +9,9 @@ const formSchema = z.object({
   message: z.string().min(10),
 });
 
-export async function POST(request: Request) {
+export async function sendEmail(data: z.infer<typeof formSchema>) {
   try {
-    const body = await request.json();
-    const { name, email, message } = formSchema.parse(body);
+    const { name, email, message } = formSchema.parse(data);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -30,17 +30,12 @@ export async function POST(request: Request) {
 
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json(
-      { message: "Email sent successfully" },
-      { status: 200 }
-    );
+    return { success: true, message: "Email sent successfully" };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.issues }, { status: 400 });
+      return { success: false, error: error.flatten() };
     }
-    return NextResponse.json(
-      { error: "Something went wrong" },
-      { status: 500 }
-    );
+    console.error(error);
+    return { success: false, message: "Something went wrong" };
   }
 }

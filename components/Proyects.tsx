@@ -9,15 +9,16 @@ import {
 } from "@/components/ui/table";
 import { useTranslations } from "next-intl";
 import { Github } from "lucide-react";
-import { Project } from "@/app/api/proyects/route";
 import React from "react";
+
 
 import { useLocale } from "next-intl";
 import { Models } from "node-appwrite";
 import Link from "next/link";
+import { Project } from "@/lib/data";
 
 export const Proyects = ({ proyects }: { proyects: Project[] }) => {
-  const t = useTranslations("Proyects");
+  const t = useTranslations("Projects");
   const locale = useLocale();
 
   const getProjectTranslation = (project: Project) => {

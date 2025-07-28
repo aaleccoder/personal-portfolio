@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import ContentWrapper from "@/components/ContentWrapper";
 import HomeClient from "@/components/HomeClient";
+import { fetchBlogs, fetchConfiguration, fetchExperiences, fetchProjects, fetchSkills } from "@/lib/data";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
@@ -35,111 +36,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-async function fetchConfiguration() {
-  try {
-    const response = await fetch(`${process.env.URL}/api/configuration`, {
-      method: "GET",
-      cache: "no-store"
-    });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch configuration: ${response.statusText}`);
-    }
-    const data = await response.json();
-    if (data && data.config && data.config.config) {
-      return JSON.parse(data.config.config);
-    } else {
-      throw new Error("Invalid configuration data structure");
-    }
-  } catch (err) {
-    const errorMessage =
-      err instanceof Error ? err.message : "Failed to fetch configuration";
-    console.error("Configuration fetch error:", err);
-    return null;
-  }
-}
-
-async function fetchSkills() {
-  try {
-    const response = await fetch(`${process.env.URL}/api/skills`, {
-      method: "GET",
-      cache: "no-store"
-    });
-    const data = await response.json();
-    return data.documents || [];
-  } catch (err) {
-    console.error("Skills fetch error:", err);
-    return [];
-  }
-}
-
-async function fetchProyects() {
-  try {
-    const response = await fetch(`${process.env.URL}/api/proyects?starred=true`, {
-      method: "GET",
-      cache: "no-store"
-    });
-    const data = await response.json();
-    if (
-      data &&
-      data.projectsResponseToClient &&
-      Array.isArray(data.projectsResponseToClient) &&
-      data.projectsResponseToClient.length > 0
-    ) {
-      return data.projectsResponseToClient;
-    } else {
-      return [];
-    }
-  } catch (err) {
-    console.error("Proyects fetch error:", err);
-    return [];
-  }
-}
-
-async function fetchBlogs() {
-  try {
-    const response = await fetch(`${process.env.URL}/api/blog?starred=true`, {
-      method: "GET",
-      cache: "no-store"
-    });
-    const data = await response.json();
-    return data || [];
-  } catch (err) {
-    console.error("Blogs fetch error:", err);
-    return [];
-  }
-}
-
-async function fetchExperiences() {
-  try {
-    const response = await fetch(`${process.env.URL}/api/experience`, {
-      method: "GET",
-      cache: "no-store"
-    });
-    const data = await response.json();
-    if (data && Array.isArray(data)) {
-      return data;
-    } else if (data?.documents) {
-      return data.documents;
-    } else {
-      return [];
-    }
-  } catch (err) {
-    console.error("Experiences fetch error:", err);
-    return [];
-  }
-}
-
 export default async function Home() {
-  const [skills, experiences, proyects, configuration, blogs] = await Promise.all([
+  const [skills, experiences, projectsData, configuration, blogsData] = await Promise.all([
     fetchSkills(),
     fetchExperiences(),
-    fetchProyects(),
+    fetchProjects(6), // Fetching 6 projects for the homepage
     fetchConfiguration(),
-    fetchBlogs()
+    fetchBlogs({ limit: 4, starred: true }) // Fetching 4 starred blogs for the homepage
   ]);
+
+  const { projects } = projectsData;
+  const { blogs } = blogsData;
+
   return (
     <ContentWrapper>
-      <HomeClient skills={skills} experiences={experiences} proyects={proyects} configuration={configuration} blogs={blogs} />
+      <HomeClient skills={skills} experiences={experiences} projects={projects} configuration={configuration} blogs={blogs} />
     </ContentWrapper>
   )
 }

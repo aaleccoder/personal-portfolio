@@ -1,9 +1,9 @@
-import { BlogSummary, BlogTranslationSummary } from "@/app/api/blog/route";
 import { ExternalLinkIcon } from "lucide-react";
 import Link from "next/dist/client/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { BlogSummary, BlogTranslationSummary } from "@/lib/data";
 
 interface BlogsStarredProps {
   blogs?: BlogSummary[];
@@ -35,7 +35,7 @@ export const BlogsStarred = ({ blogs, limit }: BlogsStarredProps) => {
   };
 
   if (displayedBlogs.length === 0) {
-    return null; // Don't render anything if no starred blogs
+    return null;
   }
 
   return (
@@ -64,22 +64,22 @@ export const BlogsStarred = ({ blogs, limit }: BlogsStarredProps) => {
               </div>
               <div className="flex-1 space-y-2">
                 <div className="flex-shrink-0 w-full flex items-start">
-                  <h3 className="text-xl font-semibold text-foreground !group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-bold">
                     {title}
                   </h3>
                 </div>
                 <div>
-                  <p className="text-muted-foreground text-base md:text-lg mb-2">
+                  <p className="text-muted-foreground mt-2">
                     {summary}
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-1">
-                  {blog.tags?.map((tech, techIndex) => (
+                <div className="flex flex-col flex-wrap gap-2 mt-4">
+                  {blog.tags?.map((tag: string, tagIndex: number) => (
                     <span
-                      key={techIndex}
-                      className="px-2 py-1 bg-secondary/30 text-foreground rounded-xl text-sm"
+                      key={tagIndex}
+                      className="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-1 rounded-full w-fit"
                     >
-                      {tech}
+                      {tag}
                     </span>
                   ))}
                 </div>

@@ -66,7 +66,7 @@ export const Story = ({ experiences }: { experiences: Experience[] }) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground text-lg">
+                  <p className="text-muted-foreground">
                     {
                       experience.translations.find(
                         (element) => element.lang === locale,
@@ -79,7 +79,7 @@ export const Story = ({ experiences }: { experiences: Experience[] }) => {
                     {experience.skills?.map((tech, techIndex) => (
                       <p
                         key={techIndex}
-                        className="px-2 py-1 bg-secondary/30 text-foreground rounded-xl "
+                        className="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-1 rounded-full"
                       >
                         {tech}
                       </p>

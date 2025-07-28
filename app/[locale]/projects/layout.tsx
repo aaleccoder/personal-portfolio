@@ -68,7 +68,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
   }
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh" }}>
+    <div style={{ position: "relative", minHeight: "100vh" }} suppressHydrationWarning>
       <style>{parallaxStyle}</style>
       <div style={{ position: "fixed", inset: 0, zIndex: 0, width: "100vw", height: "100vh", pointerEvents: "none" }}>
         <Image

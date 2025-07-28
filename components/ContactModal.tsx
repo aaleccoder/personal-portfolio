@@ -23,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "next-intl";
+import { sendEmail } from "@/lib/actions";
 import { useState } from "react";
 import { Mail } from "lucide-react";
 
@@ -60,26 +61,19 @@ export function ContactModal() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     setSubmitStatus(null);
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
 
-      if (response.ok) {
-        setSubmitStatus("success");
-        form.reset();
-      } else {
-        setSubmitStatus("error");
-      }
-    } catch (error) {
+    const result = await sendEmail(values);
+
+    if (result.success) {
+      setSubmitStatus("success");
+      form.reset();
+    } else {
       setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
+      // Optionally, you can display more specific errors from result.error
+      console.error(result.error);
     }
+
+    setIsSubmitting(false);
   }
 
   return (

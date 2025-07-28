@@ -1,16 +1,20 @@
 "use client";
-import { BlogsResponse } from "@/app/api/blog/[slug]/route"
+import { BlogEntry as BlogEntryType } from "@/lib/data";
 import { usePathname } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Comments from "@/components/Comments";
 import { Clipboard } from "lucide-react";
 
-export const BlogEntry = ({ blog }: { blog: BlogsResponse }) => {
+export const BlogEntry = ({ blog }: { blog: BlogEntryType | null }) => {
 
   const locale = usePathname().split("/")[1] || "en";
 
-  const getTranslations = (blog: BlogsResponse) => {
+  if (!blog) {
+    return <div>Blog post not found.</div>;
+  }
+
+  const getTranslations = (blog: BlogEntryType) => {
     return blog.translations.find((translation) => translation.lang === locale);
   }
   // Format dates

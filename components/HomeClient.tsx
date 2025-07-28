@@ -1,18 +1,16 @@
 "use client";
 import { Hero } from "@/components/hero";
-import { ProyectsLandPage } from "@/components/ProyectsLandPage";
+import { ProjectsLandPage } from "@/components/ProjectsLandPage";
 import { SkillsComponent } from "@/components/Skills";
-import { Experience, Story } from "@/components/Story";
+import { Story } from "@/components/Story";
 import TypewriterText from "@/components/typewriter";
 import { motion } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 
-import { Project } from "@/app/api/proyects/route";
-import type { Skills } from "@/components/Skills";
-import { PortfolioProfile } from "@/app/api/configuration/route";
-import { BlogSummary } from "@/app/api/blog/route";
 import { BlogsStarred } from "./BlogsStarred";
-export default function HomeClient({ skills, experiences, proyects, configuration, blogs }: { skills: Skills[]; experiences: Experience[]; proyects: Project[]; configuration: PortfolioProfile, blogs: BlogSummary[] }) {
+import { BlogSummary, Experience, PortfolioProfile, Project, Skills } from "@/lib/data";
+
+export default function HomeClient({ skills, experiences, projects, configuration, blogs }: { skills: Skills[]; experiences: Experience[]; projects: Project[]; configuration: PortfolioProfile | null, blogs: BlogSummary[] }) {
   const t = useTranslations("Hero");
   const locale = useLocale();
 
@@ -23,9 +21,13 @@ export default function HomeClient({ skills, experiences, proyects, configuratio
       configuration.translations["en"]?.aboutMe
     );
   };
+
+  if (!configuration) {
+    return <div>Loading...</div>; // Or a more sophisticated skeleton loader
+  }
   return (
     <div className="flex flex-col lg:flex-row font-sans transition-all duration-300 ease-in-out">
-      <div className="lg:w-5/12 lg:fixed lg:left-0 lg:top-0 lg:h-full lg:overflow-hidden lg:mb-48 transition-all duration-300 ease-in-out md:px-12">
+      <div className="lg:w-5/12 lg:fixed lg:left-0 lg:top-0 lg:h-full lg:mb-48 transition-all duration-300 ease-in-out md:px-12">
         <Hero configuration={configuration} />
       </div>
 
@@ -67,7 +69,7 @@ export default function HomeClient({ skills, experiences, proyects, configuratio
           id="projects"
           className="transition-all duration-300 ease-in-out"
         >
-          <ProyectsLandPage proyects={proyects} />
+          <ProjectsLandPage projects={projects} />
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -1,23 +1,12 @@
 "use server";
 
 import { Metadata } from "next";
-import { BlogsResponse } from "@/app/api/blog/[slug]/route";
 import { BlogEntry } from "@/components/BlogEntry";
 import ContentWrapper from "@/components/ContentWrapper";
+import { fetchBlogBySlug } from "@/lib/data";
 
-const fetchBlogEntry = async (slug: string) => {
-  try {
-    const res = await fetch(`${process.env.URL}/api/blog/${slug}`);
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string; locale: string }> }): Promise<Metadata> {
-  const resolvedParams = await params;
-  const blogEntryData: BlogsResponse = await fetchBlogEntry(resolvedParams.slug);
+export async function generateMetadata({ params }: { params: { slug: string; locale: string } }): Promise<Metadata> {
+  const blogEntryData = await fetchBlogBySlug(params.slug);
 
   if (!blogEntryData || !blogEntryData.translations || blogEntryData.translations.length === 0) {
     return {
@@ -26,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
-  const translation = blogEntryData.translations.find(t => t.lang === resolvedParams.locale);
+  const translation = blogEntryData.translations.find(t => t.lang === params.locale);
 
   const activeTranslation = translation || blogEntryData.translations[0];
 
@@ -50,9 +39,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function BlogEntryPage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
-  const resolvedParams = await params;
-  const [blogEntryData] = await Promise.all([fetchBlogEntry(resolvedParams.slug)]);
+export default async function BlogEntryPage({ params }: { params: { slug: string; locale: string } }) {
+  const blogEntryData = await fetchBlogBySlug(params.slug);
 
   return (
     <main className="w-full
