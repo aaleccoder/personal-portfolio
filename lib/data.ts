@@ -9,14 +9,14 @@ export interface BlogTranslationSummary {
   lang: string;
   title: string;
   summary: string;
-};
+}
 
 export interface BlogTranslation {
   lang: string;
   title: string;
   summary: string;
   content: string;
-};
+}
 
 export interface BlogEntry {
   $id: string;
@@ -27,7 +27,7 @@ export interface BlogEntry {
   tags: string[];
   starred: boolean;
   translations: BlogTranslation[];
-};
+}
 
 export type BlogSummary = {
   $id: string;
@@ -37,7 +37,7 @@ export type BlogSummary = {
   cover: string;
   translations: BlogTranslationSummary[];
   tags: string[];
-  starred: boolean
+  starred: boolean;
 };
 
 type SocialLinks = {
@@ -110,7 +110,7 @@ export async function fetchConfiguration(): Promise<PortfolioProfile | null> {
       appwriteEnv.appwrite.config_id,
     );
 
-    if (configDocument && typeof configDocument.config === 'string') {
+    if (configDocument && typeof configDocument.config === "string") {
       return JSON.parse(configDocument.config);
     } else {
       throw new Error("Invalid configuration data structure");
@@ -135,11 +135,13 @@ export async function fetchSkills(): Promise<Skills[]> {
   }
 }
 
-export async function fetchProjects(limit?: number): Promise<{ projects: Project[]; total: number }> {
+export async function fetchProjects(
+  limit?: number,
+): Promise<{ projects: Project[]; total: number }> {
   try {
     const database = new Databases(client);
 
-    const queries = [Query.orderDesc('$createdAt')];
+    const queries = [Query.orderDesc("$createdAt")];
     if (limit) {
       queries.push(Query.limit(limit));
     } else {
@@ -149,7 +151,7 @@ export async function fetchProjects(limit?: number): Promise<{ projects: Project
     const projectsResponse = await database.listDocuments(
       appwriteEnv.appwrite.databaseId,
       appwriteEnv.appwrite.collections.proyects,
-      queries
+      queries,
     );
 
     const projectsWithTranslations: Project[] = await Promise.all(
@@ -171,25 +173,30 @@ export async function fetchProjects(limit?: number): Promise<{ projects: Project
           starred: project.starred,
           date: project.date,
         };
-      })
+      }),
     );
 
-    return { projects: projectsWithTranslations, total: projectsResponse.total };
+    return {
+      projects: projectsWithTranslations,
+      total: projectsResponse.total,
+    };
   } catch (error) {
     console.error("Error fetching projects with translations:", error);
     return { projects: [], total: 0 };
   }
 }
 
-export async function fetchBlogs(options: { page?: number; limit?: number; starred?: boolean } = {}): Promise<{ blogs: BlogSummary[]; total: number; }> {
+export async function fetchBlogs(
+  options: { page?: number; limit?: number; starred?: boolean } = {},
+): Promise<{ blogs: BlogSummary[]; total: number }> {
   const { page = 1, limit = 10, starred } = options;
   try {
     const database = new Databases(client);
 
-    const queries = [Query.orderDesc('$createdAt')];
+    const queries = [Query.orderDesc("$createdAt")];
 
     if (starred !== undefined) {
-      queries.push(Query.equal('starred', starred));
+      queries.push(Query.equal("starred", starred));
     }
 
     const offset = (page - 1) * limit;
@@ -199,16 +206,18 @@ export async function fetchBlogs(options: { page?: number; limit?: number; starr
     const response = await database.listDocuments(
       appwriteEnv.appwrite.databaseId,
       appwriteEnv.appwrite.collections.blogs,
-      queries
+      queries,
     );
 
     const blogSummaries: BlogSummary[] = await Promise.all(
       response.documents.map(async (blog) => {
-        const blogTranslations = await database.listDocuments(
-          appwriteEnv.appwrite.databaseId,
-          appwriteEnv.appwrite.collections.blogTranslations,
-          [Query.equal('blogs', blog.$id)]
-        ).then((translationResponse) => translationResponse.documents);
+        const blogTranslations = await database
+          .listDocuments(
+            appwriteEnv.appwrite.databaseId,
+            appwriteEnv.appwrite.collections.blogTranslations,
+            [Query.equal("blog_id", blog.$id)],
+          )
+          .then((translationResponse) => translationResponse.documents);
 
         return {
           $id: blog.$id,
@@ -227,12 +236,12 @@ export async function fetchBlogs(options: { page?: number; limit?: number; starr
             lang: t.lang,
           })),
         };
-      })
+      }),
     );
 
     return { blogs: blogSummaries, total: response.total };
   } catch (error) {
-    console.error('Error fetching blogs:', error);
+    console.error("Error fetching blogs:", error);
     return { blogs: [], total: 0 };
   }
 }
@@ -240,12 +249,11 @@ export async function fetchBlogs(options: { page?: number; limit?: number; starr
 export async function fetchBlogBySlug(slug: string): Promise<BlogEntry | null> {
   try {
     const database = new Databases(client);
-    const storage = new Storage(client);
 
     const blogResponse = await database.listDocuments(
       appwriteEnv.appwrite.databaseId,
       appwriteEnv.appwrite.collections.blogs,
-      [Query.equal('slug', slug)]
+      [Query.equal("slug", slug)],
     );
 
     if (blogResponse.documents.length === 0) {
@@ -257,23 +265,18 @@ export async function fetchBlogBySlug(slug: string): Promise<BlogEntry | null> {
     const translationsResponse = await database.listDocuments(
       appwriteEnv.appwrite.databaseId,
       appwriteEnv.appwrite.collections.blogTranslations,
-      [Query.equal('blog_id', blog.$id)]
+      [Query.equal("blog_id", blog.$id)],
     );
 
-    const translations: BlogTranslation[] = await Promise.all(
-      translationsResponse.documents.map(async (t: any) => {
-        try {
-          const fileResponse = await storage.getFileDownload(
-            appwriteEnv.appwrite.bucketBlogs,
-            t.content
-          );
-          const content = Buffer.from(fileResponse as any).toString('utf-8');
-          return { ...t, content };
-        } catch (err) {
-          console.error(`Error fetching markdown for fileId ${t.content}:`, err);
-          return { ...t, content: 'Error loading content.' };
-        }
-      })
+    const translations: BlogTranslation[] = translationsResponse.documents.map(
+      (t: any) => {
+        return {
+          lang: t.lang,
+          title: t.title,
+          summary: t.summary,
+          content: t.content,
+        };
+      },
     );
 
     return {
@@ -313,11 +316,13 @@ export async function fetchExperiences(): Promise<Experience[]> {
           )
           .then((response) => response.documents);
 
-        const translations: ExperienceTranslations[] = translationDocs.map((doc: any) => ({
-          Role: doc.Role,
-          Description: doc.Description,
-          lang: doc.lang,
-        }));
+        const translations: ExperienceTranslations[] = translationDocs.map(
+          (doc: any) => ({
+            Role: doc.Role,
+            Description: doc.Description,
+            lang: doc.lang,
+          }),
+        );
 
         return {
           $id: experience.$id,
