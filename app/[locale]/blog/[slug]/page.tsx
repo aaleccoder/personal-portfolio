@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: Props) {
       title: activeTranslation.title,
       description: activeTranslation.summary || activeTranslation.title,
       type: "article",
-      publishedTime: blogEntryData.$createdAt,
-      modifiedTime: blogEntryData.$updatedAt,
+      publishedTime: blogEntryData.created,
+      modifiedTime: blogEntryData.updated,
       images: blogEntryData.cover ? [blogEntryData.cover] : [],
     },
     twitter: {
