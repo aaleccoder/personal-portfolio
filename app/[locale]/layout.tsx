@@ -29,7 +29,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Daeralysdev",
+  title: "ralecodes",
   description: "My name is Alejandro, I am a web developer with a passion for creating dynamic and responsive web applications. Explore my portfolio to see my work and learn more about my skills.",
 };
 

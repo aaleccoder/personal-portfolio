@@ -9,11 +9,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   const metadataByLocale = {
     en: {
-      title: "Daeralysdev - Full Stack Developer",
+      title: "ralecodes - Full Stack Developer",
       description: "Welcome to my personal portfolio. I'm a full stack developer passionate about creating amazing web experiences with modern technologies.",
     },
     es: {
-      title: "Daeralysdev - Desarrollador Full Stack",
+      title: "ralecodes - Desarrollador Full Stack",
       description: "Bienvenido a mi portafolio personal. Soy un desarrollador full stack apasionado por crear experiencias web increíbles con tecnologías modernas.",
     },
   };
