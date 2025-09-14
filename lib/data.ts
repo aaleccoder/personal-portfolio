@@ -153,15 +153,26 @@ export async function fetchConfiguration(): Promise<PortfolioProfile | null> {
   }
 }
 
+let skillsCache: Promise<Skills[]> | null = null;
+
 export async function fetchSkills(): Promise<Skills[]> {
-  try {
-    
-    const skills = await pb.collection(pocketbaseEnv.pocketbase.collections.skills).getFullList();
-    return skills as unknown as Skills[];
-  } catch (err) {
-    console.error("Skills fetch error:", err);
-    return [];
+  if (skillsCache) {
+    return skillsCache;
   }
+
+  skillsCache = (async () => {
+    try {
+      const skills = await pb.collection(pocketbaseEnv.pocketbase.collections.skills).getFullList();
+      return skills as unknown as Skills[];
+    } catch (err) {
+      console.error("Skills fetch error:", err);
+      return [];
+    } finally {
+      skillsCache = null;
+    }
+  })();
+
+  return skillsCache;
 }
 
 export async function fetchProjects(
@@ -265,49 +276,66 @@ export async function fetchBlogs(
   }
 }
 
+// Cache for blog requests to prevent duplicate calls
+const blogCache = new Map<string, Promise<BlogEntry | null>>();
+
 export async function fetchBlogBySlug(slug: string): Promise<BlogEntry | null> {
-  try {
-    
-    
-    const blogResponse = await pb.collection(pocketbaseEnv.pocketbase.collections.blogs).getFullList({
-      filter: `slug = "${slug}"`
-    });
-
-    if (blogResponse.length === 0) {
-      return null;
-    }
-
-    const blog = blogResponse[0];
-
-    // Parse the content field which contains the translations
-    let content: BlogTranslations = {};
-    try {
-      content = typeof blog.content === 'string' 
-        ? JSON.parse(blog.content) 
-        : blog.content || {};
-    } catch (error) {
-      console.error(`Error parsing content for blog ${blog.id}:`, error);
-      content = {};
-    }
-
-    return {
-      id: blog.id,
-      slug: blog.slug,
-      created: blog.created,
-      updated: blog.updated,
-      cover: blog.cover,
-      tags: blog.tags || [],
-      starred: blog.starred || false,
-      content: content,
-    };
-  } catch (error: any) {
-    if (error?.isAbort || error?.code === 20) {
-      console.log(`Request for blog slug "${slug}" was cancelled (auto-cancellation)`);
-      return null;
-    }
-    console.error(`Error fetching blog by slug ${slug}:`, error);
-    return null;
+  // Check if we already have a pending request for this slug
+  if (blogCache.has(slug)) {
+    return blogCache.get(slug)!;
   }
+
+  // Create the request promise
+  const requestPromise = (async () => {
+    try {
+      const blogResponse = await pb.collection(pocketbaseEnv.pocketbase.collections.blogs).getFullList({
+        filter: `slug = "${slug}"`
+      });
+
+      if (blogResponse.length === 0) {
+        return null;
+      }
+
+      const blog = blogResponse[0];
+
+      // Parse the content field which contains the translations
+      let content: BlogTranslations = {};
+      try {
+        content = typeof blog.content === 'string' 
+          ? JSON.parse(blog.content) 
+          : blog.content || {};
+      } catch (error) {
+        console.error(`Error parsing content for blog ${blog.id}:`, error);
+        content = {};
+      }
+
+      return {
+        id: blog.id,
+        slug: blog.slug,
+        created: blog.created,
+        updated: blog.updated,
+        cover: blog.cover,
+        tags: blog.tags || [],
+        starred: blog.starred || false,
+        content: content,
+      };
+    } catch (error: any) {
+      if (error?.isAbort || error?.code === 20) {
+        console.log(`Request for blog slug "${slug}" was cancelled (auto-cancellation)`);
+        return null;
+      }
+      console.error(`Error fetching blog by slug ${slug}:`, error);
+      return null;
+    } finally {
+      // Clean up cache after request completes
+      blogCache.delete(slug);
+    }
+  })();
+
+  // Store the promise in cache
+  blogCache.set(slug, requestPromise);
+  
+  return requestPromise;
 }
 
 export async function fetchExperiences(): Promise<Experience[]> {
