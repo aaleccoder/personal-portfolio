@@ -15,7 +15,10 @@ export const BlogEntry = ({ blog }: { blog: BlogEntryType | null }) => {
   }
 
   const getTranslations = (blog: BlogEntryType) => {
-    return blog.translations.find((translation) => translation.lang === locale);
+    const translation = blog.content[locale];
+    const fallbackTranslation = blog.content['en'] || Object.values(blog.content)[0];
+
+    return translation || fallbackTranslation || null;
   }
   // Format dates
   const formatDate = (dateString: string) => {

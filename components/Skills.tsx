@@ -8,7 +8,7 @@ export type Skills = {
   $id: string;
   name: string;
   icon: string;
-  profficiency: number;
+  profficiency: 'low' | 'medium' | 'high';
 };
 
 export const SkillsComponent = ({ skills }: { skills: Skills[] }) => {

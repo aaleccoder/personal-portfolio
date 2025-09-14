@@ -13,7 +13,6 @@ import React from "react";
 
 
 import { useLocale } from "next-intl";
-import { Models } from "node-appwrite";
 import Link from "next/link";
 import { Project } from "@/lib/data";
 
@@ -22,18 +21,12 @@ export const Proyects = ({ proyects }: { proyects: Project[] }) => {
   const locale = useLocale();
 
   const getProjectTranslation = (project: Project) => {
-    const translation = project.translations?.find(
-      (t: Models.Document) => t.lang === locale,
-    );
+    const translation = project.content[locale];
+    const fallbackTranslation = project.content['en'] || Object.values(project.content)[0];
+
     return {
-      name:
-        translation?.name ||
-        project.translations?.[0]?.name ||
-        t('defaults.untitled'),
-      description:
-        translation?.description ||
-        project.translations?.[0]?.description ||
-        t('defaults.noDescription'),
+      name: translation?.name || fallbackTranslation?.name || t('defaults.untitled'),
+      description: translation?.description || fallbackTranslation?.description || t('defaults.noDescription'),
     };
   };
 

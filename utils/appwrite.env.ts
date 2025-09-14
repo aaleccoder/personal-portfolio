@@ -5,30 +5,18 @@ const appwriteEnv = {
     apiKey: String(process.env.NEXT_PUBLIC_APPWRITE_API_KEY),
     databaseId: String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID),
     collections: {
-      skills: String(process.env.NEXT_PUBLIC_APPWRITE_SKILLS_COLLECTION_ID),
-      proyects: String(process.env.NEXT_PUBLIC_APPWRITE_PROYECTS_COLLECTION_ID),
-      experiences: String(
-        process.env.NEXT_PUBLIC_APPWRITE_EXPERIENCES_COLLECTION_ID,
-      ),
-      experienceTranslations: String(
-        process.env.NEXT_PUBLIC_APPWRITE_EXPERIENCESTRANSLATIONS_COLLECTION_ID,
-      ),
-      proyectsTranslations: String(
-        process.env.NEXT_PUBLIC_APPWRITE_PROYECTSTRANSLATIONS_COLLECTIONS_ID,
-      ),
-      blogs: String(
-        process.env.NEXT_PUBLIC_APPWRITE_BLOG_COLLECTION_ID),
-      blogTranslations: String(
-        process.env.NEXT_PUBLIC_APPWRITE_BLOG_TRANSLATIONS_COLLECTION_ID,
-      ),
-      newsLetter: String(process.env.NEXT_PUBLIC_APPWRITE_NEWSLETTER)
+      skills: "68c6c82b0017689f2e0e",
+      proyects: "68c6cce800292a9573c0",
+      experiences: "68c6cd6e0034eb8107a9",
+      blogs: "68c6ce08000e8f10001a",
     },
-
-    bucketBlogs: String(
-      process.env.NEXT_PUBLIC_APPWRITE_BLOGS_BUCKET_ID
-    ),
-    config: String(process.env.NEXT_PUBLIC_APPWRITE_CONFIG),
-    config_id: String(process.env.NEXT_PUBLIC_APPWRITE_CONFIG_ID),
+    config: {
+      config_collection: "68c6ce7c00234ea317c1",
+      config_id: "68c6d03e000b5d56ecf6"
+    },
+    buckets: {
+      bucketBlogs: "68c6cf0200331fbf23d0"
+    }
   },
 };
 

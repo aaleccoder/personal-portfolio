@@ -3,7 +3,7 @@ import Link from "next/dist/client/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BlogSummary, BlogTranslationSummary } from "@/lib/data";
+import { BlogSummary } from "@/lib/data";
 
 interface BlogsStarredProps {
   blogs?: BlogSummary[];
@@ -19,18 +19,12 @@ export const BlogsStarred = ({ blogs, limit }: BlogsStarredProps) => {
   const displayedBlogs = limit ? starredBlogs.slice(0, limit) : starredBlogs;
 
   const getBlogTranslation = (blog: BlogSummary) => {
-    const translation = blog.translations?.find(
-      (t: BlogTranslationSummary) => t.lang === locale,
-    );
+    const translation = blog.content[locale];
+    const fallbackTranslation = blog.content['en'] || Object.values(blog.content)[0];
+
     return {
-      title:
-        translation?.title ||
-        blog.translations?.[0]?.title ||
-        "Untitled",
-      summary:
-        translation?.summary ||
-        blog.translations?.[0]?.summary ||
-        "No summary available.",
+      title: translation?.title || fallbackTranslation?.title || "Untitled",
+      summary: translation?.summary || fallbackTranslation?.summary || "No summary available.",
     };
   };
 

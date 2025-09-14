@@ -5,7 +5,7 @@ import { fetchProjects } from "@/lib/data";
 export default async function ProyectsPage() {
   const { projects } = await fetchProjects();
   return (
-    <main>
+    <main suppressHydrationWarning>
       <ContentWrapper>
         <Proyects proyects={projects} />
       </ContentWrapper>

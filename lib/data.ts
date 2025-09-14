@@ -5,6 +5,14 @@ import { Storage } from "node-appwrite";
 
 // Type Definitions
 
+export type BlogTranslations = {
+  [langCode: string]: {
+    title: string;
+    summary: string;
+    content: string;
+  };
+};
+
 export interface BlogTranslationSummary {
   lang: string;
   title: string;
@@ -26,7 +34,7 @@ export interface BlogEntry {
   cover: string;
   tags: string[];
   starred: boolean;
-  translations: BlogTranslation[];
+  content: BlogTranslations;
 }
 
 export type BlogSummary = {
@@ -35,7 +43,7 @@ export type BlogSummary = {
   $createdAt: string;
   $updatedAt: string;
   cover: string;
-  translations: BlogTranslationSummary[];
+  content: BlogTranslations;
   tags: string[];
   starred: boolean;
 };
@@ -57,26 +65,25 @@ type Translations = {
 };
 
 export type ExperienceTranslations = {
-  Role: string;
-  Description: string;
-  lang: string;
+  [langCode: string]: {
+    role: string;
+    description: string;
+  };
 };
 
 export type Experience = {
   $id: string;
   startdate: string;
-  role: string;
   enddate: string;
-  company: string;
-  translations: ExperienceTranslations[];
-  skills: string[];
+  content: ExperienceTranslations;
+  Skills: string[];
 };
 
 export type Skills = {
   $id: string;
   name: string;
   icon: string;
-  profficiency: number;
+  profficiency: 'low' | 'medium' | 'high';
 };
 
 export type PortfolioProfile = {
@@ -89,29 +96,35 @@ export type PortfolioProfile = {
   translations: Translations;
 };
 
+export type ProjectTranslations = {
+  [langCode: string]: {
+    name: string;
+    description: string;
+  };
+};
+
 export type Project = {
   $id: string;
   project_link: string;
   skills: string[];
   images: string[];
-  translations: Models.Document[];
+  content: ProjectTranslations;
   starred: boolean;
   date: Date;
 };
 
-// Data Fetching Functions
 
 export async function fetchConfiguration(): Promise<PortfolioProfile | null> {
   try {
     const database = new Databases(client);
     const configDocument = await database.getDocument(
       appwriteEnv.appwrite.databaseId,
-      appwriteEnv.appwrite.config,
-      appwriteEnv.appwrite.config_id,
+      appwriteEnv.appwrite.config.config_collection,
+      appwriteEnv.appwrite.config.config_id,
     );
 
-    if (configDocument && typeof configDocument.config === "string") {
-      return JSON.parse(configDocument.config);
+    if (configDocument && typeof configDocument.content === "string") {
+      return JSON.parse(configDocument.content);
     } else {
       throw new Error("Invalid configuration data structure");
     }
@@ -154,34 +167,35 @@ export async function fetchProjects(
       queries,
     );
 
-    const projectsWithTranslations: Project[] = await Promise.all(
-      projectsResponse.documents.map(async (project) => {
-        const projectTranslation = await database
-          .listDocuments(
-            appwriteEnv.appwrite.databaseId,
-            appwriteEnv.appwrite.collections.proyectsTranslations,
-            [Query.equal("projects", project.$id)],
-          )
-          .then((response) => response.documents);
+    const projects: Project[] = projectsResponse.documents.map((project) => {
+      // Parse the content field which contains the translations
+      let content: ProjectTranslations = {};
+      try {
+        content = typeof project.content === 'string' 
+          ? JSON.parse(project.content) 
+          : project.content || {};
+      } catch (error) {
+        console.error(`Error parsing content for project ${project.$id}:`, error);
+        content = {};
+      }
 
-        return {
-          $id: project.$id,
-          project_link: project.project_link,
-          skills: project.skills,
-          images: project.images,
-          translations: projectTranslation,
-          starred: project.starred,
-          date: project.date,
-        };
-      }),
-    );
+      return {
+        $id: project.$id,
+        project_link: project.project_link,
+        skills: project.skills,
+        images: project.images,
+        content: content,
+        starred: project.starred,
+        date: project.date,
+      };
+    });
 
     return {
-      projects: projectsWithTranslations,
+      projects: projects,
       total: projectsResponse.total,
     };
   } catch (error) {
-    console.error("Error fetching projects with translations:", error);
+    console.error("Error fetching projects:", error);
     return { projects: [], total: 0 };
   }
 }
@@ -209,35 +223,29 @@ export async function fetchBlogs(
       queries,
     );
 
-    const blogSummaries: BlogSummary[] = await Promise.all(
-      response.documents.map(async (blog) => {
-        const blogTranslations = await database
-          .listDocuments(
-            appwriteEnv.appwrite.databaseId,
-            appwriteEnv.appwrite.collections.blogTranslations,
-            [Query.equal("blog_id", blog.$id)],
-          )
-          .then((translationResponse) => translationResponse.documents);
+    const blogSummaries: BlogSummary[] = response.documents.map((blog) => {
+      // Parse the content field which contains the translations
+      let content: BlogTranslations = {};
+      try {
+        content = typeof blog.content === 'string' 
+          ? JSON.parse(blog.content) 
+          : blog.content || {};
+      } catch (error) {
+        console.error(`Error parsing content for blog ${blog.$id}:`, error);
+        content = {};
+      }
 
-        return {
-          $id: blog.$id,
-          title: blog.title,
-          summary: blog.summary,
-          date: blog.date,
-          tags: blog.tags,
-          slug: blog.slug,
-          $createdAt: blog.$createdAt,
-          $updatedAt: blog.$updatedAt,
-          cover: blog.cover,
-          starred: blog.starred,
-          translations: blogTranslations.map((t) => ({
-            title: t.title,
-            summary: t.summary,
-            lang: t.lang,
-          })),
-        };
-      }),
-    );
+      return {
+        $id: blog.$id,
+        slug: blog.slug,
+        $createdAt: blog.$createdAt,
+        $updatedAt: blog.$updatedAt,
+        cover: blog.cover,
+        starred: blog.starred,
+        tags: blog.tags,
+        content: content,
+      };
+    });
 
     return { blogs: blogSummaries, total: response.total };
   } catch (error) {
@@ -262,22 +270,16 @@ export async function fetchBlogBySlug(slug: string): Promise<BlogEntry | null> {
 
     const blog = blogResponse.documents[0];
 
-    const translationsResponse = await database.listDocuments(
-      appwriteEnv.appwrite.databaseId,
-      appwriteEnv.appwrite.collections.blogTranslations,
-      [Query.equal("blog_id", blog.$id)],
-    );
-
-    const translations: BlogTranslation[] = translationsResponse.documents.map(
-      (t: any) => {
-        return {
-          lang: t.lang,
-          title: t.title,
-          summary: t.summary,
-          content: t.content,
-        };
-      },
-    );
+    // Parse the content field which contains the translations
+    let content: BlogTranslations = {};
+    try {
+      content = typeof blog.content === 'string' 
+        ? JSON.parse(blog.content) 
+        : blog.content || {};
+    } catch (error) {
+      console.error(`Error parsing content for blog ${blog.$id}:`, error);
+      content = {};
+    }
 
     return {
       $id: blog.$id,
@@ -287,7 +289,7 @@ export async function fetchBlogBySlug(slug: string): Promise<BlogEntry | null> {
       cover: blog.cover,
       tags: blog.tags || [],
       starred: blog.starred || false,
-      translations,
+      content: content,
     };
   } catch (error) {
     console.error(`Error fetching blog by slug ${slug}:`, error);
@@ -306,35 +308,25 @@ export async function fetchExperiences(): Promise<Experience[]> {
       )
       .then((response) => response.documents);
 
-    const experiencesResponse: Experience[] = await Promise.all(
-      experiences.map(async (experience) => {
-        const translationDocs = await database
-          .listDocuments(
-            appwriteEnv.appwrite.databaseId,
-            appwriteEnv.appwrite.collections.experienceTranslations,
-            [Query.equal("experience", experience.$id)],
-          )
-          .then((response) => response.documents);
+    const experiencesResponse: Experience[] = experiences.map((experience) => {
+      let content: ExperienceTranslations = {};
+      try {
+        content = typeof experience.content === 'string' 
+          ? JSON.parse(experience.content) 
+          : experience.content || {};
+      } catch (error) {
+        console.error(`Error parsing content for experience ${experience.$id}:`, error);
+        content = {};
+      }
 
-        const translations: ExperienceTranslations[] = translationDocs.map(
-          (doc: any) => ({
-            Role: doc.Role,
-            Description: doc.Description,
-            lang: doc.lang,
-          }),
-        );
-
-        return {
-          $id: experience.$id,
-          role: experience.role,
-          startdate: experience.startdate,
-          enddate: experience.enddate,
-          company: experience.company,
-          translations: translations,
-          skills: experience.skills,
-        };
-      }),
-    );
+      return {
+        $id: experience.$id,
+        startdate: experience.startdate,
+        enddate: experience.enddate,
+        content: content,
+        Skills: experience.Skills,
+      };
+    });
 
     return experiencesResponse;
   } catch (err) {

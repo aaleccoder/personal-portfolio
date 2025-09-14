@@ -5,25 +5,18 @@ import { usePathname } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
 import { useTranslations } from "next-intl";
 import { Project } from "@/lib/data";
-import { Models } from "node-appwrite";
 
 export const ProjectsLandPage = ({ projects }: { projects: Project[] }) => {
   const t = useTranslations("Projects");
   const locale = usePathname().split("/")[1];
 
   const getProjectTranslation = (project: Project) => {
-    const translation = project.translations?.find(
-      (t: Models.Document) => t.lang === locale,
-    );
+    const translation = project.content[locale];
+    const fallbackTranslation = project.content['en'] || Object.values(project.content)[0];
+
     return {
-      name:
-        translation?.name ||
-        project.translations?.[0]?.name ||
-        "Untitled",
-      description:
-        translation?.description ||
-        project.translations?.[0]?.description ||
-        "No description available.",
+      name: translation?.name || fallbackTranslation?.name || "Untitled",
+      description: translation?.description || fallbackTranslation?.description || "No description available.",
     };
   };
 
@@ -57,7 +50,7 @@ export const ProjectsLandPage = ({ projects }: { projects: Project[] }) => {
                   <h3 className="text-xl font-bold">{name}</h3>
                   <p className="text-muted-foreground mt-2">{description}</p>
                 </div>
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-1">
                   {project.skills.map((tech: string, techIndex: number) => (
                     <span
                       key={techIndex}

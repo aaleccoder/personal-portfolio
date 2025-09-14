@@ -52,7 +52,13 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
   }, [sortOrder, blogs, selectedTags]);
 
   const getTranslations = (blog: BlogSummary) => {
-    return blog.translations.find((translation) => translation.lang === locale);
+    const translation = blog.content[locale];
+    const fallbackTranslation = blog.content['en'] || Object.values(blog.content)[0];
+
+    return {
+      title: translation?.title || fallbackTranslation?.title || "Blog Title",
+      summary: translation?.summary || fallbackTranslation?.summary || "No summary available.",
+    };
   }
 
   return (
@@ -68,8 +74,8 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
               onChange={(e) => {
                 const searchTerm = e.target.value.toLowerCase();
                 const filteredBlogs = blogs.filter(blog => {
-                  const translations = blog.translations.map(t => t.title.toLowerCase());
-                  return translations.some(title => title.includes(searchTerm));
+                  const allTitles = Object.values(blog.content).map(translation => translation.title.toLowerCase());
+                  return allTitles.some(title => title.includes(searchTerm));
                 });
                 setBlogsState(filteredBlogs);
               }}
@@ -138,7 +144,7 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
                   <div className="sm:w-1/3 sm:min-w-[200px] h-full">
                     <Image
                       src={blog.cover}
-                      alt={getTranslations(blog)?.title || "blog image"}
+                      alt={getTranslations(blog).title || "blog image"}
                       width={400}
                       height={300}
                       className="object-cover w-full h-full sm:rounded-l-lg"
@@ -147,12 +153,12 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
                   <div className="flex-1 py-6">
                     <CardHeader>
                       <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {getTranslations(blog)?.title || "Blog Title"}
+                        {getTranslations(blog).title}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <CardDescription className="text-muted-foreground text-base mb-2 line-clamp-3">
-                        {getTranslations(blog)?.summary || "No summary available."}
+                        {getTranslations(blog).summary}
                       </CardDescription>
                     </CardContent>
                     <CardFooter className="flex flex-col items-start gap-2">

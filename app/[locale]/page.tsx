@@ -40,9 +40,9 @@ export default async function Home() {
   const [skills, experiences, projectsData, configuration, blogsData] = await Promise.all([
     fetchSkills(),
     fetchExperiences(),
-    fetchProjects(6), // Fetching 6 projects for the homepage
+    fetchProjects(6),
     fetchConfiguration(),
-    fetchBlogs({ limit: 4, starred: true }) // Fetching 4 starred blogs for the homepage
+    fetchBlogs({ limit: 4, starred: true })
   ]);
 
   const { projects } = projectsData;
