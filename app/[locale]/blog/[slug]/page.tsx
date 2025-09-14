@@ -12,16 +12,18 @@ interface Props {
 export async function generateMetadata({ params }: Props) {
   const blogEntryData = await fetchBlogBySlug((await params).slug);
 
-  if (!blogEntryData || !blogEntryData.translations || blogEntryData.translations.length === 0) {
+  if (!blogEntryData || !blogEntryData.content || Object.keys(blogEntryData.content).length === 0) {
     return {
       title: "Blog Post Not Found",
       description: "The requested blog post could not be found.",
     };
   }
 
-  const translation = blogEntryData.translations.find(async t => t.lang === (await (await params).locale));
+  const locale = (await params).locale;
+  const translation = blogEntryData.content[locale];
+  const fallbackTranslation = blogEntryData.content['en'] || Object.values(blogEntryData.content)[0];
 
-  const activeTranslation = translation || blogEntryData.translations[0];
+  const activeTranslation = translation || fallbackTranslation;
 
   return {
     title: activeTranslation.title,
