@@ -48,12 +48,12 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
         <TypewriterText
           duration={0.1}
           text={t("greeting")}
-          className="font-titles font-black text-4xl uppercase text-primary"
+          className="font-titles font-black text-4xl text-primary"
         />
         <TypewriterText
           delay={2}
           text={t("description")}
-          className="font-titles font-black text-md sm:text-xl uppercase text-foreground/90"
+          className="font-titles font-black text-xl text-foreground/90"
         />
       </div>
 
@@ -67,7 +67,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
             >
               <Link
                 href={item.href}
-                className="py-2 px-4 text-muted-foreground hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 hover:scale-110"
+                className="py-2 px-4 text-white/80 hover:text-primary hover:underline hover:underline-offset-4 transition-all duration-300 hover:scale-110"
               >
                 <p>{item.label}</p>
               </Link>
@@ -77,9 +77,9 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
       </div>
 
       <div className="max-w-xl px-4">
-        <div className="space-x-4 font-mono flex">
+        <div className="space-x-4 flex">
           <Button
-            className="p-6 text-xl uppercase hover:scale-110 md:hidden"
+            className="p-6 sm:text-xl uppercase hover:scale-110 md:hidden"
           >
             <Link href="/projects" className="flex items-center gap-2">
               <Briefcase /> {t("projects")}
@@ -91,7 +91,6 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
         </div>
 
 
-        {/* Contact info */}
         {configuration?.contact && (
           <div className="flex flex-col gap-2 mt-4 mb-2">
             {configuration.contact.email && (
@@ -123,7 +122,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
                   aria-label="GitHub"
                   className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
-                  <Github className="w-5 h-5 hover:text-gray-400" />
+                  <Github className="w-6 h-6 hover:text-gray-400" />
                 </Link>
               )}
               {configuration.socialLinks?.twitter && (
@@ -134,7 +133,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
                   aria-label="Twitter"
                   className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
-                  <Twitter className="w-5 h-5 hover:text-blue-400" />
+                  <Twitter className="w-6 h-6 hover:text-blue-400" />
                 </Link>
               )}
               {configuration.socialLinks?.instagram && (
@@ -145,7 +144,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
                   aria-label="Instagram"
                   className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
-                  <Instagram className="w-5 h-5 hover:text-pink-500" />
+                  <Instagram className="w-6 h-6 hover:text-pink-500" />
                 </Link>
               )}
               {configuration.socialLinks?.linkedin && (
@@ -157,7 +156,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
                   className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
                   <svg
-                    className="w-5 h-5 hover:text-blue-600"
+                    className="w-6 h-6 hover:text-blue-600"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -174,7 +173,7 @@ export const Hero = ({ configuration }: { configuration: PortfolioProfile | null
                   className="p-2 rounded-md transition-all duration-300 hover:bg-muted/80 hover:text-primary hover:scale-105"
                 >
                   <svg
-                    className="w-5 h-5 hover:text-green-500"
+                    className="w-6 h-6 hover:text-green-500"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >

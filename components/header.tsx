@@ -7,7 +7,7 @@ export const Header = () => {
     <header className="fixed top-0 right-0 z-50 w-full pointer-events-none">
       <nav className="flex flex-row justify-between p-4 items-center w-full pointer-events-auto">
         <Link href="/">
-          <p className="font-titles font-black uppercase">Daeralysdev</p>
+          <p className="font-titles font-black uppercase">Ralecodes</p>
         </Link>
 
         <div className="space-x-4 flex flex-row items-center">

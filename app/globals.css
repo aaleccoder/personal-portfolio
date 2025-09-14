@@ -2,6 +2,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+@media (max-width: 640px) {
+  html {
+    font-size: 70%;
+  }
+}
+
+
 :root {
   --background: oklch(0.9846 0.0017 247.8389);
   --foreground: oklch(0.2101 0.0318 264.6645);
@@ -56,7 +64,6 @@
   --tracking-normal: 0rem;
   --spacing: 0.25rem;
 
-  /* Typography scale for unified text sizes */
   --text-title: 2.25rem; /* 4xl */
   --text-title-weight: 700;
   --text-title-tracking: var(--tracking-tight);
@@ -110,7 +117,7 @@
   --font-sans: Sora, sans-serif;
   --font-serif: serif;
   --font-mono: Space_Grotesk, monospace;
-  --font-titles: Orbitron, sans-serif;
+  --font-titles: Sora, sans-serif;
   --radius: 0.5rem;
   --shadow-2xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);
   --shadow-xs: 0px 2px 4px 0px hsl(0 0% 0% / 0.05);

@@ -69,7 +69,6 @@ export function ContactModal() {
       form.reset();
     } else {
       setSubmitStatus("error");
-      // Optionally, you can display more specific errors from result.error
       console.error(result.error);
     }
 
@@ -80,7 +79,7 @@ export function ContactModal() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          className="p-6 text-xl uppercase hover:scale-110"
+          className="p-6 sm:text-xl uppercase hover:scale-110"
           variant="outline"
         >
           <Mail /> {tHero("contact")}

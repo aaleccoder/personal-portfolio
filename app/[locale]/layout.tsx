@@ -78,13 +78,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider>
-            {/* <AnimatedBackground /> */}
             <CursorFollower />
             <Header />
             <div style={{ position: "relative", zIndex: 1 }} className="mt-12">
               {children}
             </div>
-            {/* <Footer /> */}
             <ScrollToTopButton />
           </NextIntlClientProvider>
         </ThemeProvider>
