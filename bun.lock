@@ -33,6 +33,7 @@
         "node-appwrite": "^17.1.0",
         "nodemailer": "^7.0.5",
         "pg": "^8.16.3",
+        "pocketbase": "^0.26.2",
         "react": "19.1.0",
         "react-dom": "19.1.0",
         "react-hook-form": "^7.61.1",
@@ -1117,6 +1118,8 @@
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 
     "picomatch": ["picomatch@4.0.3", "", {}, "sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q=="],
+
+    "pocketbase": ["pocketbase@0.26.2", "", {}, "sha512-WA8EOBc3QnSJh8rJ3iYoi9DmmPOMFIgVfAmIGux7wwruUEIzXgvrO4u0W2htfQjGIcyezJkdZOy5Xmh7SxAftw=="],
 
     "possible-typed-array-names": ["possible-typed-array-names@1.1.0", "", {}, "sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg=="],
 

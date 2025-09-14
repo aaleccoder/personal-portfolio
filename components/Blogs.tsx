@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Checkbox } from "./ui/checkbox";
 import { BlogSummary } from '@/lib/data';
+import { getPocketBaseFileUrl } from '@/lib/utils';
+import pocketbaseEnv from '@/utils/pocketbase.env';
 
 
 
@@ -29,8 +31,8 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const sortedBlogs = [...blogs].sort((a, b) => {
-    const dateA = new Date(a.$updatedAt).getTime();
-    const dateB = new Date(b.$updatedAt).getTime();
+    const dateA = new Date(a.updated).getTime();
+    const dateB = new Date(b.updated).getTime();
     return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
   });
 
@@ -44,8 +46,8 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
       );
     }
     const sorted = filtered.sort((a, b) => {
-      const dateA = new Date(a.$updatedAt).getTime();
-      const dateB = new Date(b.$updatedAt).getTime();
+      const dateA = new Date(a.updated).getTime();
+      const dateB = new Date(b.updated).getTime();
       return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
     });
     setBlogsState(sorted);
@@ -138,12 +140,12 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
         </div>
         <div className="space-y-4">
           {blogsState.map((blog) => (
-            <Link href={`/blog/${blog.slug}`} key={blog.$id} className="block">
-              <Card key={blog.$id} className="hover:border hover:rounded-3xl hover:border-primary p-4 hover:shadow-lg transition-all duration-300 cursor-pointer gap-0 w-full bg-card hover:scale-102 hover:bg-transparent rounded-xl">
+            <Link href={`/blog/${blog.slug}`} key={blog.id} className="block">
+              <Card key={blog.id} className="hover:border hover:rounded-3xl hover:border-primary p-4 hover:shadow-lg transition-all duration-300 cursor-pointer gap-0 w-full bg-card hover:scale-102 hover:bg-transparent rounded-xl">
                 <div className="flex flex-col sm:flex-row">
                   <div className="sm:w-1/3 sm:min-w-[200px] h-full">
                     <Image
-                      src={blog.cover}
+                      src={getPocketBaseFileUrl(pocketbaseEnv.pocketbase.collections.blogs, blog.id, blog.cover)}
                       alt={getTranslations(blog).title || "blog image"}
                       width={400}
                       height={300}
@@ -170,7 +172,7 @@ export const Blog = ({ blogs, currentPage = 1, totalPages = 1 }: BlogProps) => {
                         </div>
                       )}
                       <div className="text-sm text-muted-foreground">
-                        {new Date(blog.$updatedAt).toLocaleDateString()}
+                        {new Date(blog.updated).toLocaleDateString()}
                       </div>
                     </CardFooter>
                   </div>

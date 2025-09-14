@@ -4,6 +4,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { BlogSummary } from "@/lib/data";
+import { getPocketBaseFileUrl } from '@/lib/utils';
+import pocketbaseEnv from '@/utils/pocketbase.env';
 
 interface BlogsStarredProps {
   blogs?: BlogSummary[];
@@ -49,7 +51,7 @@ export const BlogsStarred = ({ blogs, limit }: BlogsStarredProps) => {
             >
               <div className="rounded-xl w-full md:w-auto">
                 <Image
-                  src={blog.cover}
+                  src={getPocketBaseFileUrl(pocketbaseEnv.pocketbase.collections.blogs, blog.id, blog.cover)}
                   alt={title || "Blog Image"}
                   className="object-cover w-full md:w-[16rem] h-48 md:h-full rounded-md"
                   width={256}

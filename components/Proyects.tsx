@@ -30,7 +30,6 @@ export const Proyects = ({ proyects }: { proyects: Project[] }) => {
     };
   };
 
-  // Sort projects by year in descending order
   const sortedProjects = [...proyects].sort((a, b) => {
     const yearA = new Date(a.date).getFullYear();
     const yearB = new Date(b.date).getFullYear();
@@ -65,7 +64,7 @@ export const Proyects = ({ proyects }: { proyects: Project[] }) => {
               const { name, description } = getProjectTranslation(project);
               return (
                 <TableRow
-                  key={project.$id}
+                  key={project.id}
                   className="border-b border-border last:border-b-0"
                 >
                   <TableCell className="md:w-1/5 w-40 text-muted-foreground py-4 px-3 align-top min-h-[60px]">
@@ -100,22 +99,34 @@ export const Proyects = ({ proyects }: { proyects: Project[] }) => {
                   <TableCell className="md:w-1/5 w-64 text-muted-foreground py-4 px-3 align-top text-right min-h-[60px]">
                     <div className="w-full overflow-hidden">
                       <div className="md:break-all md:word-break-break-all md:overflow-wrap-anywhere md:hyphens-auto md:leading-relaxed md:whitespace-pre-wrap">
-                        <Link
-                          href={project.project_link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline font-medium flex items-center gap-1 justify-end"
-                          title={project.project_link}
-                        >
-                          {new URL(project.project_link).hostname.includes('github.com') ? (
-                            <>
-                              <Github className="h-4 w-4" />
-                              <span>github.com</span>
-                            </>
-                          ) : (
-                            new URL(project.project_link).hostname.replace('www.', '')
-                          )}
-                        </Link>
+                        {project.project_link ? (
+                          <Link
+                            href={project.project_link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline font-medium flex items-center gap-1 justify-end"
+                            title={project.project_link}
+                          >
+                            {(() => {
+                              try {
+                                const url = new URL(project.project_link);
+                                return url.hostname.includes('github.com') ? (
+                                  <>
+                                    <Github className="h-4 w-4" />
+                                    <span>github.com</span>
+                                  </>
+                                ) : (
+                                  url.hostname.replace('www.', '')
+                                );
+                              } catch (error) {
+                                // If URL parsing fails, just show the raw link
+                                return project.project_link;
+                              }
+                            })()}
+                          </Link>
+                        ) : (
+                          <span className="text-muted-foreground/50">No link</span>
+                        )}
                       </div>
                     </div>
                   </TableCell>

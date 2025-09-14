@@ -39,7 +39,7 @@ export const Story = ({ experiences }: { experiences: Experience[] }) => {
             const { role, description } = getExperienceTranslation(experience);
             return (
               <Card
-                key={experience.$id}
+                key={experience.id}
                 className="hover:border hover:rounded-3xl hover:border-primary p-4 hover:shadow-lg transition-all duration-300 gap-0 w-full hover:bg-transparent"
               >
                 <CardHeader className="flex-shrink-0 w-full flex items-start">
@@ -51,9 +51,15 @@ export const Story = ({ experiences }: { experiences: Experience[] }) => {
                   <CardHeader>
                     <CardDescription className="text-muted-foreground text-lg mb-2">
                       <p className="text-muted-foreground text-base whitespace-nowrap">
-                        {experience.startdate.split("T")[0]}
+                        {new Date(experience.startdate.split(" ")[0]).toLocaleString("en-US", {
+                          month: "long",
+                          year: "numeric",
+                        })}
                         {experience.enddate
-                          ? ` - ${experience.enddate.split("T")[0]}`
+                          ? ` - ${new Date(experience.enddate.split(" ")[0]).toLocaleString("en-US", {
+                            month: "long",
+                            year: "numeric",
+                          })}`
                           : " - Present"}
                       </p>
                     </CardDescription>

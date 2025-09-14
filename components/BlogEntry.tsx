@@ -2,9 +2,11 @@
 import { BlogEntry as BlogEntryType } from "@/lib/data";
 import { usePathname } from "next/navigation";
 import ReactMarkdown from "react-markdown";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Comments from "@/components/Comments";
 import { Clipboard } from "lucide-react";
+import { toast } from "sonner";
+import { getPocketBaseFileUrl } from '@/lib/utils';
+import pocketbaseEnv from '@/utils/pocketbase.env';
 
 export const BlogEntry = ({ blog }: { blog: BlogEntryType | null }) => {
 
@@ -108,7 +110,7 @@ export const BlogEntry = ({ blog }: { blog: BlogEntryType | null }) => {
         {blog.cover && (
           <div className="mb-6">
             <img
-              src={blog.cover}
+              src={getPocketBaseFileUrl(pocketbaseEnv.pocketbase.collections.blogs, blog.id, blog.cover)}
               alt={translation?.title || "Blog cover"}
               className="w-full h-64 md:h-96 object-cover rounded-lg shadow-md"
             />
@@ -119,10 +121,10 @@ export const BlogEntry = ({ blog }: { blog: BlogEntryType | null }) => {
         <div className="flex flex-col gap-4 text-sm text-muted-foreground mt-2">
           <div className="flex gap-4">
             <span>
-              {locale === "en" ? "Created at" : locale === "es" ? "Creado el" : "Created at"}: {formatDate(blog.$createdAt)}
+              {locale === "en" ? "Created at" : locale === "es" ? "Creado el" : "Created at"}: {formatDate(blog.created)}
             </span>
             <span>
-              {locale === "en" ? "Updated at" : locale === "es" ? "Actualizado el" : "Updated at"}: {formatDate(blog.$updatedAt)}
+              {locale === "en" ? "Updated at" : locale === "es" ? "Actualizado el" : "Updated at"}: {formatDate(blog.updated)}
             </span>
           </div>
           <div className="flex gap-4">
@@ -227,36 +229,30 @@ export const BlogEntry = ({ blog }: { blog: BlogEntryType | null }) => {
               </svg>
             </button>
 
-            <Popover>
-              <PopoverTrigger asChild>
-                <button
-                  onClick={async () => {
-                    if (typeof window !== 'undefined' && navigator.share) {
-                      try {
-                        await navigator.share({
-                          title: translation?.title || '',
-                          text: translation?.summary || '',
-                          url: window.location.href,
-                        });
-                      } catch (error) {
-                        // User cancelled share or error occurred
-                      }
-                    } else if (typeof window !== 'undefined') {
-                      const url = window.location.href;
-                      await navigator.clipboard.writeText(url);
-                    }
-                  }}
-                  className="p-2 rounded-md bg-transparent hover:bg-accent transition-colors"
-                >
-                  <Clipboard />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto">
-                <div className="text-sm">
-                  {locale === "en" ? "Link copied!" : locale === "es" ? "¡Enlace copiado!" : "Link copied!"}
-                </div>
-              </PopoverContent>
-            </Popover>
+            <button
+              onClick={async () => {
+                if (typeof window !== 'undefined' && navigator.share) {
+                  try {
+                    await navigator.share({
+                      title: translation?.title || '',
+                      text: translation?.summary || '',
+                      url: window.location.href,
+                    });
+                  } catch (error) {
+                    // User cancelled share or error occurred
+                  }
+                } else if (typeof window !== 'undefined') {
+                  const url = window.location.href;
+                  await navigator.clipboard.writeText(url);
+                  toast.success(
+                    locale === "en" ? "Link copied!" : locale === "es" ? "¡Enlace copiado!" : "Link copied!"
+                  );
+                }
+              }}
+              className="p-2 rounded-md bg-transparent hover:bg-accent transition-colors"
+            >
+              <Clipboard />
+            </button>
           </div>
         </div>
       </footer>

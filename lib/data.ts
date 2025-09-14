@@ -1,7 +1,24 @@
-import appwriteEnv from "@/utils/appwrite.env";
-import client from "@/utils/server";
-import { Databases, Models, Query } from "node-appwrite";
-import { Storage } from "node-appwrite";
+import pocketbaseEnv from "@/utils/pocketbase.env";
+import pb from "@/utils/server";
+
+// Helper function to ensure admin authentication
+const ensureAuth = async () => {
+  if (!pb.authStore.isValid) {
+    const email = process.env.POCKETBASE_USER;
+    const password = process.env.POCKETBASE_PASSWORD;
+    
+    if (email && password) {
+      try {
+        await pb.admins.authWithPassword(email, password);
+      } catch (error) {
+        console.error('Failed to re-authenticate PocketBase admin:', error);
+        throw new Error('PocketBase authentication failed');
+      }
+    } else {
+      throw new Error('PocketBase admin credentials not configured');
+    }
+  }
+};
 
 // Type Definitions
 
@@ -27,10 +44,10 @@ export interface BlogTranslation {
 }
 
 export interface BlogEntry {
-  $id: string;
+  id: string;
   slug: string;
-  $createdAt: string;
-  $updatedAt: string;
+  created: string;
+  updated: string;
   cover: string;
   tags: string[];
   starred: boolean;
@@ -38,10 +55,10 @@ export interface BlogEntry {
 }
 
 export type BlogSummary = {
-  $id: string;
+  id: string;
   slug: string;
-  $createdAt: string;
-  $updatedAt: string;
+  created: string;
+  updated: string;
   cover: string;
   content: BlogTranslations;
   tags: string[];
@@ -72,7 +89,7 @@ export type ExperienceTranslations = {
 };
 
 export type Experience = {
-  $id: string;
+  id: string;
   startdate: string;
   enddate: string;
   content: ExperienceTranslations;
@@ -80,7 +97,7 @@ export type Experience = {
 };
 
 export type Skills = {
-  $id: string;
+  id: string;
   name: string;
   icon: string;
   profficiency: 'low' | 'medium' | 'high';
@@ -104,7 +121,7 @@ export type ProjectTranslations = {
 };
 
 export type Project = {
-  $id: string;
+  id: string;
   project_link: string;
   skills: string[];
   images: string[];
@@ -116,17 +133,19 @@ export type Project = {
 
 export async function fetchConfiguration(): Promise<PortfolioProfile | null> {
   try {
-    const database = new Databases(client);
-    const configDocument = await database.getDocument(
-      appwriteEnv.appwrite.databaseId,
-      appwriteEnv.appwrite.config.config_collection,
-      appwriteEnv.appwrite.config.config_id,
-    );
+    
+    
+    const configRecords = await pb.collection(pocketbaseEnv.pocketbase.collections.config).getFullList({
+      filter: 'name = "main"'
+    });
 
-    if (configDocument && typeof configDocument.content === "string") {
-      return JSON.parse(configDocument.content);
+
+    if (configRecords.length > 0 && configRecords[0].content) {
+      return typeof configRecords[0].content === "string" 
+        ? JSON.parse(configRecords[0].content) 
+        : configRecords[0].content;
     } else {
-      throw new Error("Invalid configuration data structure");
+      throw new Error("Configuration not found");
     }
   } catch (error) {
     console.error("Configuration fetch error:", error);
@@ -136,12 +155,9 @@ export async function fetchConfiguration(): Promise<PortfolioProfile | null> {
 
 export async function fetchSkills(): Promise<Skills[]> {
   try {
-    const database = new Databases(client);
-    const response = await database.listDocuments(
-      appwriteEnv.appwrite.databaseId,
-      appwriteEnv.appwrite.collections.skills,
-    );
-    return response.documents as unknown as Skills[];
+    
+    const skills = await pb.collection(pocketbaseEnv.pocketbase.collections.skills).getFullList();
+    return skills as unknown as Skills[];
   } catch (err) {
     console.error("Skills fetch error:", err);
     return [];
@@ -152,22 +168,21 @@ export async function fetchProjects(
   limit?: number,
 ): Promise<{ projects: Project[]; total: number }> {
   try {
-    const database = new Databases(client);
-
-    const queries = [Query.orderDesc("$createdAt")];
+    
+    
+    const options: any = {
+      sort: '-created',
+    };
+    
     if (limit) {
-      queries.push(Query.limit(limit));
+      options.perPage = limit;
     } else {
-      queries.push(Query.limit(100)); // Fetch up to 100 projects if no limit is specified
+      options.perPage = 100;
     }
 
-    const projectsResponse = await database.listDocuments(
-      appwriteEnv.appwrite.databaseId,
-      appwriteEnv.appwrite.collections.proyects,
-      queries,
-    );
+    const projectsResponse = await pb.collection(pocketbaseEnv.pocketbase.collections.projects).getList(1, options.perPage, options);
 
-    const projects: Project[] = projectsResponse.documents.map((project) => {
+    const projects: Project[] = projectsResponse.items.map((project: any) => {
       // Parse the content field which contains the translations
       let content: ProjectTranslations = {};
       try {
@@ -175,12 +190,12 @@ export async function fetchProjects(
           ? JSON.parse(project.content) 
           : project.content || {};
       } catch (error) {
-        console.error(`Error parsing content for project ${project.$id}:`, error);
+        console.error(`Error parsing content for project ${project.id}:`, error);
         content = {};
       }
 
       return {
-        $id: project.$id,
+        id: project.id,
         project_link: project.project_link,
         skills: project.skills,
         images: project.images,
@@ -192,7 +207,7 @@ export async function fetchProjects(
 
     return {
       projects: projects,
-      total: projectsResponse.total,
+      total: projectsResponse.totalItems,
     };
   } catch (error) {
     console.error("Error fetching projects:", error);
@@ -205,25 +220,21 @@ export async function fetchBlogs(
 ): Promise<{ blogs: BlogSummary[]; total: number }> {
   const { page = 1, limit = 10, starred } = options;
   try {
-    const database = new Databases(client);
-
-    const queries = [Query.orderDesc("$createdAt")];
-
+    
+    
+    const filterConditions = [];
     if (starred !== undefined) {
-      queries.push(Query.equal("starred", starred));
+      filterConditions.push(`starred = ${starred}`);
     }
 
-    const offset = (page - 1) * limit;
-    queries.push(Query.limit(limit));
-    queries.push(Query.offset(offset));
+    const blogOptions: any = {
+      sort: '-created',
+      filter: filterConditions.join(' && '),
+    };
 
-    const response = await database.listDocuments(
-      appwriteEnv.appwrite.databaseId,
-      appwriteEnv.appwrite.collections.blogs,
-      queries,
-    );
+    const response = await pb.collection(pocketbaseEnv.pocketbase.collections.blogs).getList(page, limit, blogOptions);
 
-    const blogSummaries: BlogSummary[] = response.documents.map((blog) => {
+    const blogSummaries: BlogSummary[] = response.items.map((blog: any) => {
       // Parse the content field which contains the translations
       let content: BlogTranslations = {};
       try {
@@ -231,15 +242,15 @@ export async function fetchBlogs(
           ? JSON.parse(blog.content) 
           : blog.content || {};
       } catch (error) {
-        console.error(`Error parsing content for blog ${blog.$id}:`, error);
+        console.error(`Error parsing content for blog ${blog.id}:`, error);
         content = {};
       }
 
       return {
-        $id: blog.$id,
+        id: blog.id,
         slug: blog.slug,
-        $createdAt: blog.$createdAt,
-        $updatedAt: blog.$updatedAt,
+        created: blog.created,
+        updated: blog.updated,
         cover: blog.cover,
         starred: blog.starred,
         tags: blog.tags,
@@ -247,7 +258,7 @@ export async function fetchBlogs(
       };
     });
 
-    return { blogs: blogSummaries, total: response.total };
+    return { blogs: blogSummaries, total: response.totalItems };
   } catch (error) {
     console.error("Error fetching blogs:", error);
     return { blogs: [], total: 0 };
@@ -256,19 +267,17 @@ export async function fetchBlogs(
 
 export async function fetchBlogBySlug(slug: string): Promise<BlogEntry | null> {
   try {
-    const database = new Databases(client);
+    
+    
+    const blogResponse = await pb.collection(pocketbaseEnv.pocketbase.collections.blogs).getFullList({
+      filter: `slug = "${slug}"`
+    });
 
-    const blogResponse = await database.listDocuments(
-      appwriteEnv.appwrite.databaseId,
-      appwriteEnv.appwrite.collections.blogs,
-      [Query.equal("slug", slug)],
-    );
-
-    if (blogResponse.documents.length === 0) {
+    if (blogResponse.length === 0) {
       return null;
     }
 
-    const blog = blogResponse.documents[0];
+    const blog = blogResponse[0];
 
     // Parse the content field which contains the translations
     let content: BlogTranslations = {};
@@ -277,21 +286,25 @@ export async function fetchBlogBySlug(slug: string): Promise<BlogEntry | null> {
         ? JSON.parse(blog.content) 
         : blog.content || {};
     } catch (error) {
-      console.error(`Error parsing content for blog ${blog.$id}:`, error);
+      console.error(`Error parsing content for blog ${blog.id}:`, error);
       content = {};
     }
 
     return {
-      $id: blog.$id,
+      id: blog.id,
       slug: blog.slug,
-      $createdAt: blog.$createdAt,
-      $updatedAt: blog.$updatedAt,
+      created: blog.created,
+      updated: blog.updated,
       cover: blog.cover,
       tags: blog.tags || [],
       starred: blog.starred || false,
       content: content,
     };
-  } catch (error) {
+  } catch (error: any) {
+    if (error?.isAbort || error?.code === 20) {
+      console.log(`Request for blog slug "${slug}" was cancelled (auto-cancellation)`);
+      return null;
+    }
     console.error(`Error fetching blog by slug ${slug}:`, error);
     return null;
   }
@@ -299,28 +312,25 @@ export async function fetchBlogBySlug(slug: string): Promise<BlogEntry | null> {
 
 export async function fetchExperiences(): Promise<Experience[]> {
   try {
-    const database = new Databases(client);
+    
+    
+    const experiences = await pb.collection(pocketbaseEnv.pocketbase.collections.experiences).getFullList({
+      sort: '-startdate'
+    });
 
-    const experiences = await database
-      .listDocuments(
-        appwriteEnv.appwrite.databaseId,
-        appwriteEnv.appwrite.collections.experiences,
-      )
-      .then((response) => response.documents);
-
-    const experiencesResponse: Experience[] = experiences.map((experience) => {
+    const experiencesResponse: Experience[] = experiences.map((experience: any) => {
       let content: ExperienceTranslations = {};
       try {
         content = typeof experience.content === 'string' 
           ? JSON.parse(experience.content) 
           : experience.content || {};
       } catch (error) {
-        console.error(`Error parsing content for experience ${experience.$id}:`, error);
+        console.error(`Error parsing content for experience ${experience.id}:`, error);
         content = {};
       }
 
       return {
-        $id: experience.$id,
+        id: experience.id,
         startdate: experience.startdate,
         enddate: experience.enddate,
         content: content,

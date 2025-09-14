@@ -8,6 +8,7 @@ import CursorFollower from "@/components/cursor-follower";
 import { ScrollToTopButton } from "@/components/ScrollToTopButton";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import Image from "next/image";
+import { Toaster } from "sonner";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -60,6 +61,9 @@ export default function RootLayout({
   `;
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+      <head>
+        <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+      </head>
       <body className={`${sora.variable} ${orbitron.variable} ${spaceGrotesk.variable} antialiased scroll-smooth `} style={{ position: "relative", minHeight: "100vh" }}>
         <style>{parallaxStyle}</style>
         <div style={{ position: "fixed", inset: 0, zIndex: 0, width: "100vw", height: "100vh", pointerEvents: "none" }} >
@@ -86,6 +90,7 @@ export default function RootLayout({
             <ScrollToTopButton />
           </NextIntlClientProvider>
         </ThemeProvider>
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

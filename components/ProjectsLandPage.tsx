@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { Skeleton } from "./ui/skeleton";
 import { useTranslations } from "next-intl";
 import { Project } from "@/lib/data";
+import { getPocketBaseFileUrl } from '@/lib/utils';
+import pocketbaseEnv from '@/utils/pocketbase.env';
 
 export const ProjectsLandPage = ({ projects }: { projects: Project[] }) => {
   const t = useTranslations("Projects");
@@ -38,7 +40,7 @@ export const ProjectsLandPage = ({ projects }: { projects: Project[] }) => {
             >
               <div className="w-full md:w-1/3 h-48 md:h-auto rounded-lg overflow-hidden">
                 <Image
-                  src={project.images[0]}
+                  src={getPocketBaseFileUrl(pocketbaseEnv.pocketbase.collections.projects, project.id, project.images[0])}
                   alt={name}
                   width={500}
                   height={500}
